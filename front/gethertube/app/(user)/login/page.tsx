@@ -1,5 +1,11 @@
+import LoginCard from "./LoginCard";
+
 const Page = () => {
-  return <div className="flex-center h-full">로그인</div>;
+  return (
+    <div className="flex-center h-full">
+      <LoginCard />
+    </div>
+  );
 };
 
 export default Page;

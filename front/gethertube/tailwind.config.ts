@@ -17,7 +17,11 @@ const config: Config = {
     colors: {
       "header-back-color": "#0c0c0c",
       "header-font-color": "rgb(229, 229, 229)",
-      "body-back-color": "rgb(55 65 81)",
+      "body-back-color": "rgb(17 24 39)",
+      "card-back-color": "rgb(63 63 70)",
+      "content-white": "#ffffff",
+      "input-back": "rgb(39 39 42)",
+      primary: "#0d6efd",
     },
   },
   plugins: [],

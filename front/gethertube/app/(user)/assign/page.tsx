@@ -1,4 +1,10 @@
+import AssignCard from "./AssignCard";
+
 const Page = () => {
-  return <div>회원가입</div>;
+  return (
+    <div className="flex-center h-full">
+      <AssignCard />
+    </div>
+  );
 };
 export default Page;
