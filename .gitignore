@@ -1,3 +1,6 @@
+# ENV
+back/gethertube/src/main/resources/env.properties
+
 # DS Store ignore
 .DS_Store
 
