@@ -4,7 +4,9 @@ export interface TypeCardProps {
 
 const Card = ({ children }: TypeCardProps) => {
   return (
-    <div className="w-2/6 bg-card-back-color rounded-lg p-5">{children}</div>
+    <div className="max-w-screen-sm bg-card-back-color rounded-lg p-5 min-w-80">
+      {children}
+    </div>
   );
 };
 
