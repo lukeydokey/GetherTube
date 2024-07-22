@@ -1,12 +1,14 @@
 package com.toy.gethertube.dto;
 
+import com.toy.gethertube.entity.PlayList;
+import com.toy.gethertube.entity.Room;
 import com.toy.gethertube.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +18,8 @@ public class UserDto {
     private String passWord;
     private String nickName;
     private String chatColor;
-    //    private ArrayList<Playlist> userPlaylists;
-    //    private ArrayList<Room> userRooms;
+    private ArrayList<PlayList> userPlayLists;
+    private ArrayList<Room> userRooms;
 
     public User toEntity(){
         return User.builder()
