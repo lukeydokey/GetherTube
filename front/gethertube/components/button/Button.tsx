@@ -16,7 +16,7 @@ const Button = ({
   };
   return (
     <button
-      className={`button h-5 text-sm-normal rounded ${type} ${className}`}
+      className={`${className} button text-xs-normal rounded ${type} `}
       onClick={handleButtonClick}
     >
       {children}

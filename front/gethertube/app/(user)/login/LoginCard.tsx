@@ -12,8 +12,7 @@ const LoginCard = () => {
       {
         method: "GET",
         headers: {
-          userId: "test1234",
-          accept: "*/*",
+          userId: "testtest",
         },
       }
     );

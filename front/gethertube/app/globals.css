@@ -104,5 +104,8 @@ body {
     &.primary {
       @apply bg-primary text-content-white;
     }
+    &.default {
+      @apply bg-default text-content-white;
+    }
   }
 }
