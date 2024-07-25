@@ -4,8 +4,10 @@ import com.toy.gethertube.entity.PlayList;
 import com.toy.gethertube.entity.Room;
 import com.toy.gethertube.entity.User;
 import lombok.*;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,8 +20,10 @@ public class UserDto {
     private String passWord;
     private String nickName;
     private String chatColor;
-    private ArrayList<PlayList> userPlayLists;
-    private ArrayList<Room> userRooms;
+//    private ArrayList<PlayList> userPlayLists;
+    private List<String> userPlaylistsId;
+//    private ArrayList<Room> userRooms;
+    private List<String> userRoomsId;
 
     public User toEntity(){
         return User.builder()

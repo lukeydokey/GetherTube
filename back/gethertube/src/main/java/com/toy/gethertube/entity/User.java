@@ -4,10 +4,13 @@ import com.toy.gethertube.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "user")
 @Getter
@@ -15,7 +18,8 @@ import java.util.ArrayList;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@ToString
+public class User extends Auditable{
     @Id
     private String _id;
     @Indexed(unique = true)
@@ -25,10 +29,16 @@ public class User {
     private String nickName;
     private String chatColor;
 
-    @DBRef(db = "playlist", lazy = true)
-    private ArrayList<PlayList> userPlayLists;
-    @DBRef(db = "room", lazy = true)
-    private ArrayList<Room> userRooms;
+//    @DBRef(db = "playlist", lazy = true)
+//    private ArrayList<PlayList> userPlayLists;
+    @Field("userPlaylists")
+    @DocumentReference(collection = "playlist", lazy = true)
+    private List<PlayList> userPlaylists = new ArrayList<>();
+//    @DBRef(db = "room", lazy = true)
+//    private ArrayList<Room> userRooms;
+    @Field("userRooms")
+    @DocumentReference(collection = "room", lazy = true)
+    private List<Room> userRooms = new ArrayList<>();
 
     public UserDto toUserDto() {
         return UserDto.builder()
@@ -37,9 +47,15 @@ public class User {
                 .passWord(this.passWord)
                 .nickName(this.nickName)
                 .chatColor(this.chatColor)
-                .userPlayLists(this.userPlayLists)
-                .userRooms(this.userRooms)
+//                .userPlayLists(this.userPlayLists)
+//                .userRooms(this.userRooms)
+                .userPlaylistsId(this.userPlaylists != null ? this.userPlaylists.stream().map(PlayList::get_id).collect(Collectors.toList()) : new ArrayList<>())
+                .userRoomsId(this.userRooms != null ? this.userRooms.stream().map(Room::get_id).collect(Collectors.toList()) : new ArrayList<>())
                 .build();
     }
 
+    @Override
+    public String getId() {
+        return this._id;
+    }
 }

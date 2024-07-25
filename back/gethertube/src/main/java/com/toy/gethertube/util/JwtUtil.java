@@ -1,6 +1,5 @@
 package com.toy.gethertube.util;
 
-import com.toy.gethertube.dto.LoginDto;
 import com.toy.gethertube.dto.UserDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -34,18 +33,18 @@ public class JwtUtil {
     }
 
     private String createToken(UserDto userInfo, long accessTokenValidity) {
-        Claims claims = Jwts.claims().build();
-        claims.put("_id", userInfo.get_id());
-        claims.put("userId", userInfo.getUserId());
+        ClaimsBuilder claims = Jwts.claims();
+        claims.add("userId", userInfo.getUserId());
+        claims.add("nickName", userInfo.getNickName());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime expiration = now.plusSeconds(accessTokenValidity);
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(Date.from(now.toInstant()))
-                .setExpiration(Date.from(expiration.toInstant()))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .claims(claims.build())
+                .issuedAt(Date.from(now.toInstant()))
+                .expiration(Date.from(expiration.toInstant()))
+                .signWith(key)
                 .compact();
 
     }
