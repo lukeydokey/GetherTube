@@ -5,10 +5,18 @@ import React from "react";
 interface TypeInputProps {
   value?: string;
   type?: React.HTMLInputTypeAttribute;
+  placeholder?: string;
+  className?: string;
   onChange?: (data: string) => void;
 }
 
-const Input = ({ type = "text", value, onChange }: TypeInputProps) => {
+const Input = ({
+  type = "text",
+  value,
+  placeholder,
+  className,
+  onChange,
+}: TypeInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(e.target.value);
@@ -17,8 +25,9 @@ const Input = ({ type = "text", value, onChange }: TypeInputProps) => {
   return (
     <input
       type={type}
-      className="input-common"
+      className={`input-common ${className}`}
       value={value}
+      placeholder={placeholder}
       onChange={(e) => handleChange(e)}
     />
   );
