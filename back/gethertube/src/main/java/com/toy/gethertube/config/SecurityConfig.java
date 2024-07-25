@@ -1,5 +1,10 @@
 package com.toy.gethertube.config;
 
+import com.toy.gethertube.filter.JwtAuthFilter;
+import com.toy.gethertube.service.CustomUserDetailsService;
+import com.toy.gethertube.util.CustomAccessDeniedHandler;
+import com.toy.gethertube.util.CustomAuthenticationEntryPoint;
+import com.toy.gethertube.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig{
+
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtUtil jwtUtil;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
             "/user/**", "/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
@@ -36,19 +46,19 @@ public class SecurityConfig{
 
 
         //JwtAuthFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
-//        http.addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
-//
-//        http.exceptionHandling((exceptionHandling) -> exceptionHandling
-//                .authenticationEntryPoint(authenticationEntryPoint)
-//                .accessDeniedHandler(accessDeniedHandler)
-//        );
+        http.addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling((exceptionHandling) -> exceptionHandling
+                .authenticationEntryPoint(authenticationEntryPoint) // 인증되지 않은 사용자
+                .accessDeniedHandler(accessDeniedHandler) // 인가되지 않은 사용자 (권한)
+        );
 
         // 권한 규칙 작성
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         //@PreAuthrization을 사용할 것이기 때문에 모든 경로에 대한 인증처리는 Pass
-                        .anyRequest().permitAll()
-//                        .anyRequest().authenticated()
+//                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
         );
 
         return http.build();
