@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Button, Input } from ".";
+import { Button, Input, YoutubeInput } from ".";
 
 const Navigator = () => {
   const pathname = usePathname();
@@ -11,9 +11,9 @@ const Navigator = () => {
       <div className="flex items-center">
         <Link href="/">Home</Link>
       </div>
-      {pathname.includes("/room") && (
+      {pathname.includes("/room/") && (
         <div className="flex items-center w-1/4">
-          <Input
+          <YoutubeInput
             className="text-sm-normal placeholder:text-sm-normal placeholder:flex placeholder:items-center w-full"
             placeholder="유튜브 url을 입력 해 주세요"
           />
