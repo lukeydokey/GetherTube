@@ -3,6 +3,7 @@ package com.toy.gethertube.controller;
 import com.toy.gethertube.dto.LoginDto;
 import com.toy.gethertube.dto.LoginResDto;
 import com.toy.gethertube.dto.UserDto;
+import com.toy.gethertube.dto.UserUpdateReqDto;
 import com.toy.gethertube.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,5 +39,11 @@ public class UserController {
     @Operation(summary = "회원 정보 조회")
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         return userService.getUserInfo(userDetails.getUsername());
+    }
+
+    @PutMapping("")
+    @Operation(summary = "회원 정보 수정")
+    public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateReqDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
+        return userService.updateUserInfo(userDto, userDetails.getUsername());
     }
 }

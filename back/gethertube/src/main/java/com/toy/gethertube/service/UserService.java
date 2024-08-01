@@ -3,6 +3,7 @@ package com.toy.gethertube.service;
 import com.toy.gethertube.dto.LoginDto;
 import com.toy.gethertube.dto.LoginResDto;
 import com.toy.gethertube.dto.UserDto;
+import com.toy.gethertube.dto.UserUpdateReqDto;
 import com.toy.gethertube.entity.User;
 import com.toy.gethertube.repository.UserRepo;
 import com.toy.gethertube.util.JwtUtil;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,5 +60,13 @@ public class UserService {
     public ResponseEntity<?> getUserInfo(String userId) {
         User user = userRepository.findOneByUserId(userId).orElse(null);
         return ResponseEntity.ok(ResponseUtil.success("회원 정보 조회 성공", user.toUserDto()));
+    }
+
+    @Transactional
+    public ResponseEntity<?> updateUserInfo(UserUpdateReqDto userDto, String userId) {
+        User user = userRepository.findOneByUserId(userId).orElse(null);
+        user.setNickName(userDto.getNickName());
+        user.setChatColor(userDto.getChatColor());
+        return ResponseEntity.ok(ResponseUtil.success("회원 정보 수정 성공", userRepository.save(user).toUserDto()));
     }
 }
