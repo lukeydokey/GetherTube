@@ -1,7 +1,6 @@
 package com.toy.gethertube.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toy.gethertube.dto.ErrorResponseDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,9 +27,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          AuthenticationException authException) throws IOException, ServletException {
         log.error("Not Authenticated Request", authException);
 
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), authException.getMessage(), LocalDateTime.now());
-
-        String responseBody = objectMapper.writeValueAsString(errorResponseDto);
+        String responseBody = objectMapper.writeValueAsString(ResponseUtil.error(HttpStatus.UNAUTHORIZED.value(),authException.getMessage()));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");

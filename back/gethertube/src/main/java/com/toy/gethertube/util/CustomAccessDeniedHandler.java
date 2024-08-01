@@ -1,7 +1,6 @@
 package com.toy.gethertube.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.toy.gethertube.dto.ErrorResponseDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +13,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Slf4j(topic = "FORBIDDEN_EXCEPTION_HANDLER")
 @AllArgsConstructor
@@ -29,9 +27,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.error("No Authorities", accessDeniedException);
 
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), accessDeniedException.getMessage(), LocalDateTime.now());
-
-        String responseBody = objectMapper.writeValueAsString(errorResponseDto);
+        String responseBody = objectMapper.writeValueAsString(ResponseUtil.error(HttpStatus.FORBIDDEN.value(),accessDeniedException.getMessage()));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setCharacterEncoding("UTF-8");
