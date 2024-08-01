@@ -3,6 +3,8 @@ package com.toy.gethertube.repository;
 import com.toy.gethertube.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
 public interface UserRepo extends MongoRepository<User, String> {
-    User findByUserId(String userId);
+    Optional<User> findOneByUserId(String userId);
 }
