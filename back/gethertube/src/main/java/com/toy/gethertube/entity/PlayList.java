@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayList {
+public class PlayList extends Auditable{
     @Id
     private String _id;
     private String userId;
@@ -27,5 +27,10 @@ public class PlayList {
                 .userId(this.userId)
                 .urls(this.urls)
                 .build();
+    }
+
+    @Override
+    public String getId() {
+        return this._id;
     }
 }
