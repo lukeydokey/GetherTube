@@ -1,5 +1,6 @@
 package com.toy.gethertube.entity;
 
+import com.toy.gethertube.dto.PlayListDto;
 import com.toy.gethertube.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -49,8 +50,8 @@ public class User extends Auditable{
                 .chatColor(this.chatColor)
 //                .userPlayLists(this.userPlayLists)
 //                .userRooms(this.userRooms)
-                .userPlaylistsId(this.userPlaylists != null ? this.userPlaylists.stream().map(PlayList::get_id).collect(Collectors.toList()) : new ArrayList<>())
-                .userRoomsId(this.userRooms != null ? this.userRooms.stream().map(Room::get_id).collect(Collectors.toList()) : new ArrayList<>())
+                .userPlaylists(this.userPlaylists != null ? this.userPlaylists.stream().map(PlayList::toResDto).toList() : new ArrayList<>())
+                .userRooms(this.userRooms != null ? this.userRooms.stream().map(Room::toDto).toList() : new ArrayList<>())
                 .build();
     }
 

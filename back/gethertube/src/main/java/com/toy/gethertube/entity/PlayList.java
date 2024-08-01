@@ -1,6 +1,7 @@
 package com.toy.gethertube.entity;
 
 import com.toy.gethertube.dto.PlayListDto;
+import com.toy.gethertube.dto.PlayListResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +28,10 @@ public class PlayList extends Auditable{
                 .userId(this.userId)
                 .urls(this.urls)
                 .build();
+    }
+
+    public PlayListResDto toResDto(){
+        return new PlayListResDto(_id, urls);
     }
 
     @Override

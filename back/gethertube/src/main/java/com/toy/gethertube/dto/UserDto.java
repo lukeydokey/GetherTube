@@ -21,9 +21,9 @@ public class UserDto {
     private String nickName;
     private String chatColor;
 //    private ArrayList<PlayList> userPlayLists;
-    private List<String> userPlaylistsId;
+    private List<PlayListResDto> userPlaylists;
 //    private ArrayList<Room> userRooms;
-    private List<String> userRoomsId;
+    private List<RoomDto> userRooms;
 
     public User toEntity(){
         return User.builder()
