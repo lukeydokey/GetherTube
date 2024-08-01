@@ -27,7 +27,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.error("No Authorities", accessDeniedException);
 
-        String responseBody = objectMapper.writeValueAsString(ResponseUtil.error(HttpStatus.FORBIDDEN.value(),accessDeniedException.getMessage()));
+        String responseBody = objectMapper.writeValueAsString(ResponseUtil.error(accessDeniedException.getMessage(), HttpStatus.FORBIDDEN.value()));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setCharacterEncoding("UTF-8");

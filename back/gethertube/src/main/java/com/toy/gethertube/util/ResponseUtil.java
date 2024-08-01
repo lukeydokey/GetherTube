@@ -10,7 +10,7 @@ public class ResponseUtil {
         return new Response<>(200,message,data, LocalDateTime.now());
     }
 
-    public static <T> Response<T> error(int status, String message) {
+    public static <T> Response<T> error(String message, int status) {
         return new Response<>(status,message, LocalDateTime.now());
     }
 

@@ -42,7 +42,7 @@ public class UserService {
         if (user == null || !passwordEncoder.matches(password, user.getPassWord())) {
             log.error("아이디 혹은 비밀번호가 일치하지 않습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ResponseUtil.error(HttpStatus.UNAUTHORIZED.value(), "아이디 혹은 비밀번호가 일치하지 않습니다."));
+                    .body(ResponseUtil.error( "아이디 혹은 비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()));
         }
 
         String accessToken = jwtUtil.createAccessToken(user.toUserDto());
