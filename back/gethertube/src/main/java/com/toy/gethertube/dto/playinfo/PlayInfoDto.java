@@ -1,4 +1,4 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.playinfo;
 
 import com.toy.gethertube.entity.PlayInfo;
 import lombok.*;

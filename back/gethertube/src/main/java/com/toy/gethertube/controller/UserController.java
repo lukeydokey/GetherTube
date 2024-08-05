@@ -1,9 +1,8 @@
 package com.toy.gethertube.controller;
 
-import com.toy.gethertube.dto.LoginDto;
-import com.toy.gethertube.dto.LoginResDto;
-import com.toy.gethertube.dto.UserDto;
-import com.toy.gethertube.dto.UserUpdateReqDto;
+import com.toy.gethertube.dto.user.LoginDto;
+import com.toy.gethertube.dto.user.UserReqDto;
+import com.toy.gethertube.dto.user.UserUpdateReqDto;
 import com.toy.gethertube.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,10 +22,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("")
+    @PostMapping
     @Operation(summary = "회원가입")
-    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
-        return userService.save(userDto);
+    public ResponseEntity<?> register(@RequestBody UserReqDto userReqDto) {
+        return userService.save(userReqDto);
     }
 
     @PostMapping("/login")
@@ -35,15 +34,34 @@ public class UserController {
         return userService.login(loginDto);
     }
 
-    @GetMapping("")
+    @GetMapping
     @Operation(summary = "회원 정보 조회")
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         return userService.getUserInfo(userDetails.getUsername());
     }
 
-    @PutMapping("")
+    @PutMapping
     @Operation(summary = "회원 정보 수정")
     public ResponseEntity<?> updateUserInfo(@RequestBody UserUpdateReqDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
         return userService.updateUserInfo(userDto, userDetails.getUsername());
+    }
+
+    @DeleteMapping
+    @Operation(summary = "회원 정보 삭제")
+    public ResponseEntity<?> deleteUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        return userService.deleteUser(userDetails.getUsername());
+    }
+
+    @PostMapping("/idCheck")
+    @Operation(summary = "아이디 중복 확인")
+    public ResponseEntity<?> idCheck(@RequestBody UserReqDto userReqDto) {
+        log.info("ID Check: {}", userReqDto.getUserId());
+        return userService.checkUserId(userReqDto.getUserId());
+    }
+
+    @PostMapping("/nickCheck")
+    @Operation(summary = "닉네임 중복 확인")
+    public ResponseEntity<?> nickCheck(@RequestBody UserReqDto userReqDto) {
+        return userService.checkNickName(userReqDto.getNickName());
     }
 }

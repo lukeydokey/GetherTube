@@ -1,7 +1,6 @@
 package com.toy.gethertube.controller;
 
-import com.toy.gethertube.dto.PlayListDto;
-import com.toy.gethertube.dto.PlayListReqDto;
+import com.toy.gethertube.dto.playlist.PlayListReqDto;
 import com.toy.gethertube.service.PlayListService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

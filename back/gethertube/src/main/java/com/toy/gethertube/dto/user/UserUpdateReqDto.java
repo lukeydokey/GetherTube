@@ -1,4 +1,4 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserUpdateReqDto {
-//    private String passWord;
+//    private String password;
     private String nickName;
     private String chatColor;
 }

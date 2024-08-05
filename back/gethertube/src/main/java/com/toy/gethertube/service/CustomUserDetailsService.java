@@ -1,7 +1,7 @@
 package com.toy.gethertube.service;
 
 
-import com.toy.gethertube.dto.CustomUserDetails;
+import com.toy.gethertube.dto.user.CustomUserDetails;
 import com.toy.gethertube.entity.User;
 import com.toy.gethertube.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepo.findOneByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(userId + " 등록된 사용자가 없습니다. "));
 
-        return new CustomUserDetails(user.toUserDto());
+        return new CustomUserDetails(user);
     }
 
 }

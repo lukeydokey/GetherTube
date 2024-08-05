@@ -1,4 +1,4 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.chat;
 
 import com.toy.gethertube.entity.Chat;
 import lombok.*;

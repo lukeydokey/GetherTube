@@ -1,4 +1,4 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.room;
 
 import com.toy.gethertube.entity.Chat;
 import com.toy.gethertube.entity.Member;

@@ -1,4 +1,4 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.playlist;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
