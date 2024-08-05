@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepo.findOneByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(userId + " 등록된 사용자가 없습니다. "));
 
-        return new CustomUserDetails(user.toUserDto());
+        return new CustomUserDetails(user);
     }
 
 }

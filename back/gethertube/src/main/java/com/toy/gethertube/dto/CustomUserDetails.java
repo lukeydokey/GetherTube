@@ -1,5 +1,6 @@
 package com.toy.gethertube.dto;
 
+import com.toy.gethertube.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final UserDto userDto;
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -30,12 +31,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userDto.getPassWord();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() { // 유저 아이디
-        return userDto.getUserId();
+        return user.getUserId();
     }
 
 
