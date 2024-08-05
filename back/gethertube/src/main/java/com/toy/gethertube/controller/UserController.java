@@ -1,8 +1,8 @@
 package com.toy.gethertube.controller;
 
-import com.toy.gethertube.dto.LoginDto;
-import com.toy.gethertube.dto.UserReqDto;
-import com.toy.gethertube.dto.UserUpdateReqDto;
+import com.toy.gethertube.dto.user.LoginDto;
+import com.toy.gethertube.dto.user.UserReqDto;
+import com.toy.gethertube.dto.user.UserUpdateReqDto;
 import com.toy.gethertube.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,6 +1,6 @@
 package com.toy.gethertube.entity;
 
-import com.toy.gethertube.dto.ChatDto;
+import com.toy.gethertube.dto.chat.ChatDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

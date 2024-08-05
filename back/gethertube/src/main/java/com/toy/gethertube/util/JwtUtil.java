@@ -1,6 +1,6 @@
 package com.toy.gethertube.util;
 
-import com.toy.gethertube.dto.LoginDto;
+import com.toy.gethertube.dto.user.LoginDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

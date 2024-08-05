@@ -1,8 +1,7 @@
 package com.toy.gethertube.entity;
 
-import com.toy.gethertube.dto.RoomDto;
+import com.toy.gethertube.dto.room.RoomDto;
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;

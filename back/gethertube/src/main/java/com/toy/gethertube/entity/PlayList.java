@@ -1,7 +1,7 @@
 package com.toy.gethertube.entity;
 
-import com.toy.gethertube.dto.PlayListDto;
-import com.toy.gethertube.dto.PlayListResDto;
+import com.toy.gethertube.dto.playlist.PlayListDto;
+import com.toy.gethertube.dto.playlist.PlayListResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

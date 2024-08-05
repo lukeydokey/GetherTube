@@ -1,7 +1,7 @@
 package com.toy.gethertube.service;
 
 
-import com.toy.gethertube.dto.CustomUserDetails;
+import com.toy.gethertube.dto.user.CustomUserDetails;
 import com.toy.gethertube.entity.User;
 import com.toy.gethertube.repository.UserRepo;
 import lombok.RequiredArgsConstructor;

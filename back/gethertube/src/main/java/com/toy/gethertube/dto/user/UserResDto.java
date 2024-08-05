@@ -1,5 +1,7 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.user;
 
+import com.toy.gethertube.dto.playlist.PlayListResDto;
+import com.toy.gethertube.dto.room.RoomDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

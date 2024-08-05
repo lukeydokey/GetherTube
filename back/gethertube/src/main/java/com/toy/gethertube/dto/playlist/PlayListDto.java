@@ -1,4 +1,4 @@
-package com.toy.gethertube.dto;
+package com.toy.gethertube.dto.playlist;
 
 import com.toy.gethertube.entity.PlayList;
 import lombok.*;

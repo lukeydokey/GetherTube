@@ -1,9 +1,9 @@
 package com.toy.gethertube.service;
 
-import com.toy.gethertube.dto.LoginDto;
-import com.toy.gethertube.dto.LoginResDto;
-import com.toy.gethertube.dto.UserReqDto;
-import com.toy.gethertube.dto.UserUpdateReqDto;
+import com.toy.gethertube.dto.user.LoginDto;
+import com.toy.gethertube.dto.user.LoginResDto;
+import com.toy.gethertube.dto.user.UserReqDto;
+import com.toy.gethertube.dto.user.UserUpdateReqDto;
 import com.toy.gethertube.entity.User;
 import com.toy.gethertube.repository.UserRepo;
 import com.toy.gethertube.util.JwtUtil;

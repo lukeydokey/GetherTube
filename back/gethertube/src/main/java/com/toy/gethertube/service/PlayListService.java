@@ -1,7 +1,7 @@
 package com.toy.gethertube.service;
 
-import com.toy.gethertube.dto.PlayListDto;
-import com.toy.gethertube.dto.PlayListReqDto;
+import com.toy.gethertube.dto.playlist.PlayListDto;
+import com.toy.gethertube.dto.playlist.PlayListReqDto;
 import com.toy.gethertube.entity.PlayList;
 import com.toy.gethertube.entity.User;
 import com.toy.gethertube.repository.PlayListRepo;

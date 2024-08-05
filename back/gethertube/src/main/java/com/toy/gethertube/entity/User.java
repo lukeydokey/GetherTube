@@ -1,7 +1,6 @@
 package com.toy.gethertube.entity;
 
-import com.toy.gethertube.dto.UserReqDto;
-import com.toy.gethertube.dto.UserResDto;
+import com.toy.gethertube.dto.user.UserResDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
