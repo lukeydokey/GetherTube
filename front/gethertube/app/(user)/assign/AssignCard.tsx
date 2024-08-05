@@ -2,6 +2,12 @@
 import { TitleCard, LabelInput, FullButton } from "@/components";
 import Link from "next/link";
 import { useState } from "react";
+import { registUserApi } from "@/api/api";
+import {
+  TypeReqUserRegist,
+  ResponseFormat,
+  TypeResUserRegist,
+} from "@/api/types";
 
 const AssignCard = () => {
   const [email, setEmail] = useState("");
@@ -9,8 +15,23 @@ const AssignCard = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
+  const fetchUserRegist = async () => {
+    const reqData: TypeReqUserRegist = {
+      userId: email,
+      passWord: password,
+      nickName: nickname,
+      chatColor: "",
+    };
+    const response: ResponseFormat<TypeResUserRegist> = await registUserApi(
+      reqData
+    );
+    if (response.status === 200) {
+      console.log("유저 생성 완료");
+    }
+  };
+
   const handleButtonClick = () => {
-    console.log(email, nickname, password, passwordConfirm);
+    fetchUserRegist();
   };
 
   return (
