@@ -1,6 +1,5 @@
 package com.toy.gethertube.service;
 
-import com.toy.gethertube.dto.playlist.PlayListDto;
 import com.toy.gethertube.dto.playlist.PlayListReqDto;
 import com.toy.gethertube.dto.playlist.PlayListResDto;
 import com.toy.gethertube.entity.PlayList;
@@ -28,14 +27,15 @@ public class PlayListService {
     private final PlayListRepo playListRepository;
 
     @Transactional
-    public ResponseEntity<?> savePlaylist(String userId, PlayListReqDto playListDto) {
+    public ResponseEntity<?> savePlaylist(String userId, PlayListReqDto requestDto) {
         PlayList playList = new PlayList();
         try {
             User user = userRepository.findOneByUserId(userId).orElse(null);
-            playList = playListRepository.save(PlayListDto.builder()
+            playList = playListRepository.save(PlayList.builder()
                     .userId(userId)
-                    .urls(playListDto.getUrls())
-                    .build().toEntity());
+                    .title(requestDto.getTitle())
+                    .urls(requestDto.getUrls())
+                    .build());
             List<PlayList> playlistIds;
             if(user.getUserPlaylists() == null){
                 playlistIds = new ArrayList<>();
