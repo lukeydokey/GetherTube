@@ -19,8 +19,18 @@ public class PlayListController {
 
     private final PlayListService playListService;
 
-    @PostMapping("")
-    public ResponseEntity<?> mongoSavePlayList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PlayListReqDto playListDto){
+    @PostMapping
+    public ResponseEntity<?> savePlayList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PlayListReqDto playListDto){
         return playListService.savePlaylist(userDetails.getUsername(), playListDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllPlayList(@AuthenticationPrincipal UserDetails userDetails) {
+        return playListService.getAllPlayLists(userDetails.getUsername());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePlayList(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String id) {
+        return playListService.deletePlaylist(userDetails.getUsername(), id);
     }
 }
