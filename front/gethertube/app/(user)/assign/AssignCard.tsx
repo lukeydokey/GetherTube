@@ -8,6 +8,8 @@ import {
   ResponseFormat,
   TypeResUserRegist,
 } from "@/api/types";
+import { useToast } from "@/hook/useToast";
+import { useRouter } from "next/navigation";
 
 const AssignCard = () => {
   const [email, setEmail] = useState("");
@@ -15,10 +17,14 @@ const AssignCard = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
+  const { showToast } = useToast();
+
+  const router = useRouter();
+
   const fetchUserRegist = async () => {
     const reqData: TypeReqUserRegist = {
       userId: email,
-      passWord: password,
+      password,
       nickName: nickname,
       chatColor: "",
     };
@@ -26,7 +32,8 @@ const AssignCard = () => {
       reqData
     );
     if (response.status === 200) {
-      console.log("유저 생성 완료");
+      showToast("회원가입이 완료되었습니다.", "success");
+      router.push("/login");
     }
   };
 

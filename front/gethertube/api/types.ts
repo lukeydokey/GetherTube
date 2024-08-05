@@ -1,6 +1,6 @@
 export interface TypeReqUserRegist {
   userId: string;
-  passWord: string;
+  password: string;
   nickName: string;
   chatColor: string;
 }
@@ -18,4 +18,15 @@ export interface TypeResUserRegist {
   chatColor: string;
   userPlaylistsId: string[];
   userRoomsId: string[];
+}
+
+export interface TypeReqLogin {
+  userId: string;
+  password: string;
+}
+
+export interface TypeResLogin {
+  userId: string;
+  nickName: string;
+  accessToken: string;
 }

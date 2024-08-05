@@ -7,6 +7,7 @@ interface TypeLabelInputProps {
   required?: boolean;
   maxLength?: number;
   onChange?: (data: string) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const LabelInput = ({
@@ -16,6 +17,7 @@ const LabelInput = ({
   required = false,
   maxLength,
   onChange,
+  onKeyDown,
 }: TypeLabelInputProps) => {
   return (
     <div className="flex flex-col gap-2">
@@ -23,6 +25,7 @@ const LabelInput = ({
       <Input
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         maxLength={maxLength}
         type={type}
         required={required}

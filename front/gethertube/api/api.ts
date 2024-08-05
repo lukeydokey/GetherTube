@@ -1,4 +1,4 @@
-import { TypeReqUserRegist } from "./types";
+import { TypeReqUserRegist, TypeReqLogin } from "./types";
 
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/videos";
 const BASE_URL =
@@ -34,6 +34,14 @@ export const getYoutubeApi = async (id: string) => {
 export const registUserApi = async (params: TypeReqUserRegist) => {
   const response = await fetchPost<TypeReqUserRegist>(
     `${BASE_URL}${urls.userRegist}`,
+    params
+  );
+  return response.json();
+};
+
+export const loginApi = async (params: TypeReqLogin) => {
+  const response = await fetchPost<TypeReqLogin>(
+    `${BASE_URL}${urls.login}`,
     params
   );
   return response.json();
