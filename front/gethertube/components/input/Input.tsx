@@ -11,6 +11,8 @@ export interface TypeInputProps {
   className?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onChange?: (data: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const Input = ({
@@ -22,6 +24,8 @@ const Input = ({
   className = "",
   onChange,
   onKeyDown,
+  onFocus,
+  onBlur,
 }: TypeInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
@@ -32,6 +36,15 @@ const Input = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (onKeyDown) onKeyDown(e);
   };
+
+  const handleFocus = () => {
+    if (onFocus) onFocus();
+  };
+
+  const handleBlur = () => {
+    if (onBlur) onBlur();
+  };
+
   return (
     <input
       type={type}
@@ -42,6 +55,8 @@ const Input = ({
       onChange={(e) => handleChange(e)}
       required={required}
       onKeyDown={handleKeyDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     />
   );
 };
