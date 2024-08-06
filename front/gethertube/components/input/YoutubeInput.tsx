@@ -32,7 +32,7 @@ const YoutubeInput = (props: TypeInputProps) => {
         style={{ backgroundColor: "blue" }}
       >
         {title} {channel}
-        <Image {...thumbnail} src={thumbnail.url as string} alt="thumbnail" />
+        <Image src={thumbnail.url as string} alt="thumbnail" />
       </div>
     </div>
   );
