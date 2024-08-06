@@ -1,3 +1,4 @@
+"use client";
 type TypeStorageKey = "user" | "accessToken";
 
 export const utilStorage = () => {
