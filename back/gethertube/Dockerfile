@@ -16,13 +16,10 @@ WORKDIR /app
 # gradlew 파일의 줄바꿈 형식 변환 및 실행 권한 부여
 RUN dos2unix /app/gradlew && chmod +x ./gradlew && ls -l ./gradlew
 
-# 빌드 명령 실행 전 디버깅
-RUN ls -l /app && /bin/bash ./gradlew --version
-
 RUN /bin/bash ./gradlew bootJar
 
 FROM openjdk:17-alpine
 
 COPY --from=builder /app/build/libs/*.jar gethertubeBE.jar
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/gethertubeBE.jar"]
+ENTRYPOINT ["java", "-jar", "/gethertubeBE.jar"]
