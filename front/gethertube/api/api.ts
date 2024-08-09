@@ -1,8 +1,7 @@
 import { TypeReqUserRegist, TypeReqLogin } from "./types";
 
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/videos";
-const BASE_URL =
-  "http://ec2-3-35-51-36.ap-northeast-2.compute.amazonaws.com:18080/api";
+const BASE_URL = "https://gethertube.codns.com/api";
 
 const urls = {
   userRegist: "/user",
