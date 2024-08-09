@@ -58,7 +58,6 @@ const YoutubeInput = (props: TypeInputProps) => {
     <div className="relative flex w-full">
       <Input
         {...props}
-        // onKeyDown={handleKeyDown}
         onChange={handleInputChange}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}

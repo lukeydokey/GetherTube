@@ -6,6 +6,8 @@ const BASE_URL = "https://gethertube.codns.com/api";
 const urls = {
   userRegist: "/user",
   login: "/user/login",
+  nickCheck: "/user/nickCheck",
+  idCheck: "/user/idCheck",
 };
 
 const fetchPost = async <T>(url: string, params: T): Promise<Response> => {
@@ -28,6 +30,16 @@ export const getYoutubeApi = async (id: string) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const idCheckApi = async (params: { userId: string }) => {
+  const response = await fetchPost(`${BASE_URL}${urls.idCheck}`, params);
+  return response.json();
+};
+
+export const nicknameCheckApi = async (params: { nickName: string }) => {
+  const response = await fetchPost(`${BASE_URL}${urls.nickCheck}`, params);
+  return response.json();
 };
 
 export const registUserApi = async (params: TypeReqUserRegist) => {

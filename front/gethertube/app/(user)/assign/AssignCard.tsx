@@ -2,7 +2,7 @@
 import { TitleCard, LabelInput, FullButton } from "@/components";
 import Link from "next/link";
 import { useState } from "react";
-import { registUserApi } from "@/api/api";
+import { registUserApi, idCheckApi, nicknameCheckApi } from "@/api/api";
 import {
   TypeReqUserRegist,
   ResponseFormat,
@@ -37,7 +37,55 @@ const AssignCard = () => {
     }
   };
 
-  const handleButtonClick = () => {
+  const fetchIdCheck = async () => {
+    const response: ResponseFormat<string> = await idCheckApi({
+      userId: email,
+    });
+    if (response.status === 200) {
+      return true;
+    }
+    return false;
+  };
+
+  const fetchNicknameCheck = async () => {
+    const response: ResponseFormat<string> = await nicknameCheckApi({
+      nickName: nickname,
+    });
+    if (response.status === 200) {
+      return true;
+    }
+    return false;
+  };
+
+  const validateCheck = () => {
+    if (!email || !nickname || !password || !passwordConfirm) {
+      showToast("회원가입에 필요한 정보를 입력 해 주세요.", "error");
+      return false;
+    }
+    if (password !== passwordConfirm) {
+      showToast("비밀번호를 다시 입력 해 주세요.", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const handleButtonClick = async () => {
+    if (!validateCheck()) return;
+    const [isIdAvailable, isNicknameAvailable] = await Promise.all([
+      fetchIdCheck(),
+      fetchNicknameCheck(),
+    ]);
+
+    if (!isIdAvailable) {
+      showToast("이미 사용중인 ID입니다.", "error");
+      return;
+    }
+
+    if (!isNicknameAvailable) {
+      showToast("이미 사용중인 닉네임입니다.", "error");
+      return;
+    }
+
     fetchUserRegist();
   };
 
