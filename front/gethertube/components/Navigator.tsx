@@ -5,8 +5,13 @@ import { Button, Input, YoutubeInput } from ".";
 import { utilStorage } from "@/util/utilStorage";
 import { userStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Navigator = () => {
+  const [userDetail, setUserDetail] = useState<{
+    userId: string;
+    nickName: string;
+  }>({ userId: "", nickName: "" });
   const { userId, nickName, setUser } = userStore();
   const pathname = usePathname();
   const router = useRouter();
@@ -19,6 +24,10 @@ const Navigator = () => {
     setUser("", "");
     router.replace("/");
   };
+
+  useEffect(() => {
+    setUserDetail({ userId, nickName });
+  }, [userId, nickName]);
 
   return (
     <div className="flex justify-between bg-header-back-color h-12 text-header-font-color px-3 shadow-xl">
@@ -34,9 +43,11 @@ const Navigator = () => {
         </div>
       )}
       <div className="flex gap-2 items-center placeholder:text-xs-normal">
-        {userId && nickName ? (
+        {userDetail.userId && userDetail.nickName ? (
           <>
-            <span className="text-white">안녕하세요 {nickName}님!</span>
+            <span className="text-white">
+              안녕하세요 {userDetail.nickName}님!
+            </span>
             <Link
               className="px-3 py-2 text-xs-normal bg-default rounded-md"
               href="/user/rooms"
