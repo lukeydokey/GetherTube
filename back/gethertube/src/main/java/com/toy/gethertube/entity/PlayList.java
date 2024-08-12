@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 
-@Document(collection = "playlist")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "playlist")
 public class PlayList extends Auditable{
     @Id
     private String _id;

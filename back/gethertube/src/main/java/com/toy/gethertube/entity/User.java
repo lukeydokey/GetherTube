@@ -11,13 +11,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "user")
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Document(collection = "user")
 public class User extends Auditable{
     @Id
     private String _id;
@@ -43,7 +43,7 @@ public class User extends Auditable{
                 .nickName(this.nickName)
                 .chatColor(this.chatColor)
                 .userPlaylists(this.userPlaylists != null ? this.userPlaylists.stream().map(PlayList::toResDto).toList() : new ArrayList<>())
-                .userRooms(this.userRooms != null ? this.userRooms.stream().map(Room::toDto).toList() : new ArrayList<>())
+                .userRooms(this.userRooms != null ? this.userRooms.stream().map(Room::toResDto).toList() : new ArrayList<>())
                 .build();
     }
 

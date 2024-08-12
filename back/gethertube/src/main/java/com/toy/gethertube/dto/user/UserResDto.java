@@ -1,7 +1,7 @@
 package com.toy.gethertube.dto.user;
 
 import com.toy.gethertube.dto.playlist.PlayListResDto;
-import com.toy.gethertube.dto.room.RoomDto;
+import com.toy.gethertube.dto.room.RoomResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +19,5 @@ public class UserResDto {
     private String nickName;
     private String chatColor;
     private List<PlayListResDto> userPlaylists;
-    private List<RoomDto> userRooms;
+    private List<RoomResDto> userRooms;
 }
