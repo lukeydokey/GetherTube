@@ -5,5 +5,15 @@ import LabelInput from "./input/LabelInput";
 import Button from "./button/Button";
 import FullButton from "./button/FullButton";
 import YoutubeInput from "./input/YoutubeInput";
+import Avatar from "./avatar/Avatar";
 
-export { Card, TitleCard, Input, LabelInput, Button, FullButton, YoutubeInput };
+export {
+  Card,
+  TitleCard,
+  Input,
+  LabelInput,
+  Button,
+  FullButton,
+  YoutubeInput,
+  Avatar,
+};
