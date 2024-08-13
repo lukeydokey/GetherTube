@@ -8,13 +8,15 @@ const urls = {
   login: "/user/login",
   nickCheck: "/user/nickCheck",
   idCheck: "/user/idCheck",
+  addRoom: "/room",
 };
 
-const fetchPost = async <T>(url: string, params: T): Promise<Response> => {
+const fetchPost = async <T>(url: string, params?: T): Promise<Response> => {
   const res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
     body: JSON.stringify(params),
   });
@@ -55,5 +57,10 @@ export const loginApi = async (params: TypeReqLogin) => {
     `${BASE_URL}${urls.login}`,
     params
   );
+  return response.json();
+};
+
+export const addRoomApi = async () => {
+  const response = await fetchPost(`${BASE_URL}${urls.addRoom}`);
   return response.json();
 };

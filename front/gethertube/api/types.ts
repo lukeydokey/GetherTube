@@ -30,3 +30,19 @@ export interface TypeResLogin {
   nickName: string;
   accessToken: string;
 }
+
+export interface TypeResAddRoom {
+  _id: string;
+  roomId: string;
+  roomMembers: {
+    userId: string;
+    nickName: string;
+    authority: string;
+  }[];
+  urls: string[];
+  playType: string;
+  isShuffled: boolean;
+  replayType: string;
+  playInfo: string | null;
+  chat: string | null;
+}

@@ -2,6 +2,8 @@
 import { Button } from "@/components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { addRoomApi } from "@/api/api";
+import { ResponseFormat, TypeResAddRoom } from "@/api/types";
 
 const Page = () => {
   const router = useRouter();
@@ -10,6 +12,13 @@ const Page = () => {
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const randomIndex = Math.floor(Math.random() * chars.length);
     return chars[randomIndex];
+  };
+
+  const fetchAddRoom = async () => {
+    const response: ResponseFormat<TypeResAddRoom> = await addRoomApi();
+    if (response.status === 200) {
+      router.push(`/room/${response?.data?.roomId}`);
+    }
   };
 
   const getRandomString = () => {
@@ -27,8 +36,9 @@ const Page = () => {
   };
 
   const handleRoomClick = () => {
-    const randomRoom = getRandomString();
-    if (randomRoom) router.push(`/room/${randomRoom}`);
+    fetchAddRoom();
+    // const randomRoom = getRandomString();
+    // if (randomRoom) router.push(`/room/${randomRoom}`);
   };
 
   return (
