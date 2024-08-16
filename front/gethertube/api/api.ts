@@ -45,18 +45,24 @@ export const nicknameCheckApi = async (params: { nickName: string }) => {
 };
 
 export const registUserApi = async (params: TypeReqUserRegist) => {
-  const response = await fetchPost<TypeReqUserRegist>(
-    `${BASE_URL}${urls.userRegist}`,
-    params
-  );
+  const response = await fetch(`${BASE_URL}${urls.userRegist}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
   return response.json();
 };
 
 export const loginApi = async (params: TypeReqLogin) => {
-  const response = await fetchPost<TypeReqLogin>(
-    `${BASE_URL}${urls.login}`,
-    params
-  );
+  const response = await fetch(`${BASE_URL}${urls.login}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
   return response.json();
 };
 
