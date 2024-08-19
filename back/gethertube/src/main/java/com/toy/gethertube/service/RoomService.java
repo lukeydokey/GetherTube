@@ -80,6 +80,35 @@ public class RoomService {
     }
 
     @Transactional
+    public ResponseEntity<?> deleteRoom(String userId, String roomId){
+        try{
+            Room room = roomRepository.findByRoomId(roomId).orElseThrow();
+
+            if(!isOwner(room, userId)){
+                log.error("접근할 수 없는 요청입니다.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtil.error("접근할 수 없는 요청입니다.", HttpStatus.FORBIDDEN.value()));
+            }
+            List<User> users = new ArrayList<>();
+            for(RoomMember roomMember : room.getRoomMembers()){
+                users.add(userRepository.findOneByUserId(userId).orElseThrow());
+            }
+            playInfoRepository.deleteById(room.getPlayInfo().get_id());
+            roomRepository.delete(room);
+            for(User user : users){
+                List<Room> rooms = user.getUserRooms();
+                rooms.remove(room);
+                userRepository.save(user);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("내부 서버 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+        return ResponseEntity.ok(ResponseUtil.success("룸 삭제 성공", "룸 " + roomId + " 삭제 완료"));
+    }
+
+    @Transactional
     public ResponseEntity<?> addRoomMember(String roomId, String userId){
         Room room;
         try {
@@ -104,15 +133,8 @@ public class RoomService {
         Room room;
         try{
             room = roomRepository.findByRoomId(roomId).orElseThrow();
-            List<RoomMember> roomMembers = room.getRoomMembers();
-            String authority = "";
-            for(RoomMember roomMember : roomMembers){
-                if(roomMember.getUserId().equals(userId)){
-                    authority = roomMember.getAuthority();
-                    break;
-                }
-            }
-            if(!authority.equals("Owner")){
+
+            if(!isOwner(room, userId)){
                 log.error("접근할 수 없는 요청입니다.");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ResponseUtil.error("접근할 수 없는 요청입니다.", HttpStatus.FORBIDDEN.value()));
@@ -135,6 +157,40 @@ public class RoomService {
         return ResponseEntity.ok(ResponseUtil.success("룸 멤버 업데이트 성공", room.toResDto()));
     }
 
+    @Transactional
+    public ResponseEntity<?> deleteRoomMember(String roomId, String userId, String memberId){
+        Room room;
+        try {
+            room = roomRepository.findByRoomId(roomId).orElseThrow();
+
+            if(!isOwner(room, userId)){
+                log.error("접근할 수 없는 요청입니다.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtil.error("접근할 수 없는 요청입니다.", HttpStatus.FORBIDDEN.value()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
+        }
+        try {
+            User user = userRepository.findOneByUserId(memberId).orElseThrow();
+            room.deleteMember(user.getUserId());
+            room = roomRepository.save(room);
+
+            List<Room> rooms = user.getUserRooms();
+            rooms.remove(room);
+            user.setUserRooms(rooms);
+            userRepository.save(user);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("내부 서버 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+        return ResponseEntity.ok(ResponseUtil.success("룸 멤버 삭제 성공", room.toResDto()));
+    }
+
+
 
     // Room Member 추가하는 메서드
     private void addMember(Room room, String userId, String authority){
@@ -152,6 +208,20 @@ public class RoomService {
         }
         user.setUserRooms(roomIds);
         userRepository.save(user);
+    }
+
+    //Owner 권한 확인하는 메서드
+    private boolean isOwner(Room room, String userId){
+        List<RoomMember> roomMembers = room.getRoomMembers();
+        String authority = "";
+        for(RoomMember roomMember : roomMembers){
+            if(roomMember.getUserId().equals(userId)){
+                authority = roomMember.getAuthority();
+                break;
+            }
+        }
+
+        return authority.equals("Owner");
     }
 
     private String createRandomId() {

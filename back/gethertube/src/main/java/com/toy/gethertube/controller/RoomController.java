@@ -32,6 +32,12 @@ public class RoomController {
         return roomService.getRoom(roomId);
     }
 
+    @DeleteMapping("/{roomId}")
+    @Operation(summary = "룸 삭제")
+    public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal UserDetails user, @PathVariable("roomId") String roomId) {
+        return roomService.deleteRoom(user.getUsername(), roomId);
+    }
+
     @PostMapping("/member/{roomId}")
     @Operation(summary = "룸 멤버 추가")
     public ResponseEntity<?> addRoomMember(@PathVariable("roomId") String roomId, @AuthenticationPrincipal UserDetails userDetails) {
@@ -44,6 +50,14 @@ public class RoomController {
                                               @AuthenticationPrincipal UserDetails userDetails,
                                               @RequestBody RoomMemberReqDto roomMemberReqDto) {
         return roomService.updateRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto);
+    }
+
+    @DeleteMapping("/member/{roomId}")
+    @Operation(summary = "룸 멤버 삭제")
+    public ResponseEntity<?> deleteRoomMember(@PathVariable("roomId") String roomId,
+                                              @AuthenticationPrincipal UserDetails userDetails,
+                                              @RequestBody RoomMemberReqDto roomMemberReqDto) {
+        return roomService.deleteRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto.getUserId());
     }
 
 }

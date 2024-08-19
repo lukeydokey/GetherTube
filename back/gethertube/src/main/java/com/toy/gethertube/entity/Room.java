@@ -52,8 +52,13 @@ public class Room {
         }
     }
 
-    public void deleteMember(RoomMember member){
-        roomMembers.remove(member);
+    public void deleteMember(String userId){
+        for(int i=0;i<roomMembers.size();i++){
+            if(roomMembers.get(i).getUserId().equals(userId)){
+                roomMembers.remove(i);
+                break;
+            }
+        }
     }
 
     public RoomResDto toResDto(){
