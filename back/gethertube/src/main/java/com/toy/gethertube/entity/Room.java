@@ -43,6 +43,15 @@ public class Room {
         roomMembers.add(member);
     }
 
+    public void updateMember(String userId, String authority){
+        for(RoomMember member : roomMembers){
+            if(member.getUserId().equals(userId)){
+                member.setAuthority(authority);
+                break;
+            }
+        }
+    }
+
     public void deleteMember(RoomMember member){
         roomMembers.remove(member);
     }

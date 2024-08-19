@@ -1,6 +1,5 @@
 package com.toy.gethertube.entity;
 
-import com.toy.gethertube.dto.playinfo.PlayInfoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
