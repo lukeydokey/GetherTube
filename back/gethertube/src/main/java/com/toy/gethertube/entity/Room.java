@@ -1,41 +1,72 @@
 package com.toy.gethertube.entity;
 
-import com.toy.gethertube.dto.room.RoomDto;
-import lombok.*;
+import com.toy.gethertube.dto.room.RoomResDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@Document(collection = "room")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "room")
 public class Room {
     @Id
     private String _id;
     private String roomId;
-    private String roomUrl;
-    private ArrayList<Member> members;
-    private ArrayList<String> playlists;
+    private List<RoomMember> roomMembers;
+    private List<String> urls;
+
+    // Queue, List
     private String playType;
+    // 셔플, 리플레이는 List 일때만 적용
     private Boolean isShuffled;
+    // No, One, All
     private String replayType;
 
-    @DBRef(lazy = true)
+    @DocumentReference(collection = "playinfo", lazy = true)
     private PlayInfo playInfo;
-    @DBRef(lazy = true)
+
+    @Field("roomChat")
+    @DocumentReference(collection = "chat", lazy = true)
     private Chat chat;
 
-    public RoomDto toDto(){
-        return RoomDto.builder()
+    public void addMember(RoomMember member){
+        roomMembers.add(member);
+    }
+
+    public void updateMember(String userId, String authority){
+        for(RoomMember member : roomMembers){
+            if(member.getUserId().equals(userId)){
+                member.setAuthority(authority);
+                break;
+            }
+        }
+    }
+
+    public void deleteMember(String userId){
+        for(int i=0;i<roomMembers.size();i++){
+            if(roomMembers.get(i).getUserId().equals(userId)){
+                roomMembers.remove(i);
+                break;
+            }
+        }
+    }
+
+    public RoomResDto toResDto(){
+        return RoomResDto.builder()
                 ._id(this._id)
                 .roomId(this.roomId)
-                .roomUrl(this.roomUrl)
-                .members(this.members)
-                .playlists(this.playlists)
+                .roomMembers(this.roomMembers)
+                .urls(this.urls)
                 .playType(this.playType)
                 .isShuffled(this.isShuffled)
                 .replayType(this.replayType)

@@ -1,7 +1,7 @@
 FROM openjdk:17-alpine AS builder
 
-# bash 및 dos2unix 설치
-RUN apk add --no-cache bash dos2unix
+# bash 설치
+RUN apk add --no-cache bash
 
 # 빌드 컨텍스트의 gradlew 파일을 복사
 COPY gradlew /app/gradlew
@@ -13,16 +13,15 @@ COPY src /app/src
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# gradlew 파일의 줄바꿈 형식 변환 및 실행 권한 부여
-RUN dos2unix /app/gradlew && chmod +x ./gradlew && ls -l ./gradlew
+RUN chmod +x ./gradlew && ls -l ./gradlew
 
-# 빌드 명령 실행 전 디버깅
-RUN ls -l /app && /bin/bash ./gradlew --version
+# 윈도우 환경에서 \r 들어간 부분 삭제
+RUN sed -i 's/\r$//' ./gradlew
 
 RUN /bin/bash ./gradlew bootJar
 
-FROM openjdk:17-alpine
+FROM openjdk:17-slim
 
 COPY --from=builder /app/build/libs/*.jar gethertubeBE.jar
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/gethertubeBE.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod","/gethertubeBE.jar"]
