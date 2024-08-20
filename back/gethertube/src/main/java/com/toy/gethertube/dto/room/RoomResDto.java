@@ -15,7 +15,7 @@ public class RoomResDto {
     private String _id;
     private String roomId;
     private List<RoomMember> roomMembers;
-    private List<String> urls;
+    private List<String> roomPlaylist;
     private String playType;
     private Boolean isShuffled;
     private String replayType;

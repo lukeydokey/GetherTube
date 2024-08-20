@@ -12,10 +12,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "playinfo")
-public class PlayInfo {
+public class PlayInfo extends Auditable{
     @Id
     private String _id;
     private String roomId;
     private Long playTime;
     private Boolean isPlaying;
+
+    @Override
+    public String getId() {
+        return this._id;
+    }
 }
