@@ -46,3 +46,37 @@ export interface TypeResAddRoom {
   playInfo: string | null;
   chat: string | null;
 }
+
+export interface TypeReqAddRoomPlaylist {
+  playlistUrl: string;
+}
+
+export interface TypeResAddRoomPlaylist {
+  roomPlaylist: string[];
+}
+
+export interface TypeUserRooms {
+  _id: string;
+  roomId: string;
+  roomMembers: {
+    userId: string;
+    nickName: string;
+    authority: string;
+  }[];
+  roomPlaylist: string[];
+  playType: string;
+  isShuffled: boolean;
+  replayType: string;
+  // 추후 수정 예정
+  playInfo: any;
+  chat: any;
+}
+
+export interface TypeResUserDetail {
+  _id: string;
+  userId: string;
+  nickName: string;
+  chatColor: string;
+  userPlaylists: string[];
+  userRooms: TypeUserRooms[];
+}

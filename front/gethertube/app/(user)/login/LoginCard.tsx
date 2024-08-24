@@ -1,21 +1,25 @@
 "use client";
 import { TitleCard, LabelInput, FullButton } from "@/components";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { loginApi } from "@/api/api";
 import { ResponseFormat, TypeReqLogin, TypeResLogin } from "@/api/types";
 import { useToast } from "@/hook/useToast";
 import { utilStorage } from "@/util/utilStorage";
 import { useRouter } from "next/navigation";
 import { userStore } from "@/store/userStore";
-import { useCookies } from "@/api/cookies";
+
+import { handleSubmit } from "./actions";
+import { useFormState } from "react-dom";
 
 const LoginCard = () => {
-  const { setCookie } = useCookies();
+  const [state, action] = useFormState(handleSubmit, null);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
   const { setUser } = userStore();
+
+  // console.log(state);
 
   const router = useRouter();
   const storage = utilStorage();
@@ -37,7 +41,6 @@ const LoginCard = () => {
       });
       storage.setItem("accessToken", accessToken);
       setUser(userId, nickName);
-      setCookie("accessToken", accessToken);
       router.push("/");
     } else {
       showToast("로그인에 실패하였습니다.", "error");
@@ -56,31 +59,55 @@ const LoginCard = () => {
     if (e.key === "Enter") handleClick();
   };
 
+  useEffect(() => {
+    if (!state) return;
+    if (state && state.status === 200) {
+      const { data } = state;
+      if (data) {
+        showToast("로그인에 성공했습니다.", "success");
+        const { userId, nickName, accessToken } = data;
+        storage.setItem("user", {
+          userId,
+          nickName,
+        });
+        storage.setItem("accessToken", accessToken);
+        setUser(userId, nickName);
+        router.push("/");
+      }
+    } else {
+      showToast("로그인에 실패했습니다..", "error");
+    }
+  }, [state]);
+
   return (
     <TitleCard title="Log In">
-      <div className="flex flex-col gap-4">
-        <LabelInput
-          label="E-Mail"
-          value={id}
-          onChange={(data) => setId(data)}
-        />
-        <LabelInput
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(data) => setPassword(data)}
-          onKeyDown={handleEnter}
-        />
-        <FullButton className="mt-2" type="primary" onClick={handleClick}>
-          Log In
-        </FullButton>
-        <span className="text-xs-normal text-content-white">
-          Not signed up?{" "}
-          <Link href="/assign" className="text-primary cursor-pointer">
-            Sign Up
-          </Link>
-        </span>
-      </div>
+      <form action={action}>
+        <div className="flex flex-col gap-4">
+          <LabelInput
+            label="E-Mail"
+            name="email"
+            value={id}
+            onChange={(data) => setId(data)}
+          />
+          <LabelInput
+            label="Password"
+            type="password"
+            name="password"
+            value={password}
+            onChange={(data) => setPassword(data)}
+            onKeyDown={handleEnter}
+          />
+          <FullButton className="mt-2" type="primary">
+            Log In
+          </FullButton>
+          <span className="text-xs-normal text-content-white">
+            Not signed up?{" "}
+            <Link href="/assign" className="text-primary cursor-pointer">
+              Sign Up
+            </Link>
+          </span>
+        </div>
+      </form>
     </TitleCard>
   );
 };

@@ -3,6 +3,7 @@
 import React from "react";
 
 export interface TypeInputProps {
+  name: string;
   value?: string;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
@@ -17,6 +18,7 @@ export interface TypeInputProps {
 
 const Input = ({
   type = "text",
+  name,
   value,
   placeholder,
   required = false,
@@ -48,6 +50,7 @@ const Input = ({
   return (
     <input
       type={type}
+      name={name}
       className={`input-common ${className} shadow-sm placeholder-gray-400 focus:outline-none`}
       maxLength={maxLength}
       value={value}

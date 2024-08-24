@@ -2,6 +2,7 @@ import { Input } from "../index";
 
 interface TypeLabelInputProps {
   label: string;
+  name: string;
   value?: string;
   type?: React.HTMLInputTypeAttribute;
   required?: boolean;
@@ -12,6 +13,7 @@ interface TypeLabelInputProps {
 
 const LabelInput = ({
   label,
+  name,
   value,
   type,
   required = false,
@@ -24,6 +26,7 @@ const LabelInput = ({
       <span className="text-xs-normal text-content-white">{label}</span>
       <Input
         value={value}
+        name={name}
         onChange={onChange}
         onKeyDown={onKeyDown}
         maxLength={maxLength}

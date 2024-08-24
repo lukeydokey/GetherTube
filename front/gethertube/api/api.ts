@@ -1,14 +1,32 @@
-import { TypeReqUserRegist, TypeReqLogin } from "./types";
+import {
+  TypeReqUserRegist,
+  TypeReqLogin,
+  TypeReqAddRoomPlaylist,
+} from "./types";
+import { getCookie } from "./cookies";
 
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/videos";
-const BASE_URL = "https://gethertube.codns.com/api";
+const BASE_URL = "https://www.gethertube.site/api";
 
 const urls = {
   userRegist: "/user",
   login: "/user/login",
   nickCheck: "/user/nickCheck",
   idCheck: "/user/idCheck",
+
   addRoom: "/room",
+  addRoomPlaylist: (roomId: string) => `/room/${roomId}/playlist`,
+};
+
+const fetchGet = async (url: string): Promise<Response> => {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  });
+  return res;
 };
 
 const fetchPost = async <T>(url: string, params?: T): Promise<Response> => {
@@ -34,6 +52,9 @@ export const getYoutubeApi = async (id: string) => {
   }
 };
 
+/**
+ * User Api
+ */
 export const idCheckApi = async (params: { userId: string }) => {
   const response = await fetchPost(`${BASE_URL}${urls.idCheck}`, params);
   return response.json();
@@ -66,7 +87,33 @@ export const loginApi = async (params: TypeReqLogin) => {
   return response.json();
 };
 
+export const userDetailApi = async () => {
+  const accessToken = await getCookie("accessToken");
+  const response = await fetch(`${BASE_URL}${urls.userRegist}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken})}`,
+    },
+  });
+  return response.json();
+};
+
+/**
+ * Room Api
+ */
 export const addRoomApi = async () => {
   const response = await fetchPost(`${BASE_URL}${urls.addRoom}`);
+  return response.json();
+};
+
+export const addRoomPlaylistApi = async (
+  roomId: string,
+  params: TypeReqAddRoomPlaylist
+) => {
+  const response = await fetchPost(
+    `${BASE_URL}${urls.addRoomPlaylist(roomId)}`,
+    params
+  );
   return response.json();
 };
