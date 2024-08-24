@@ -94,6 +94,7 @@ const AssignCard = () => {
       <div className="flex flex-col gap-4 *:invalid:bg-red-400">
         <LabelInput
           label="E-Mail"
+          name="email"
           value={email}
           onChange={(d) => setEmail(d)}
           type="email"
@@ -102,6 +103,7 @@ const AssignCard = () => {
         />
         <LabelInput
           label="Nickname"
+          name="nickName"
           value={nickname}
           onChange={(d) => setNickname(d)}
           type="text"
@@ -110,6 +112,7 @@ const AssignCard = () => {
         />
         <LabelInput
           label="Password"
+          name="password"
           value={password}
           onChange={(d) => setPassword(d)}
           type="password"
@@ -118,6 +121,7 @@ const AssignCard = () => {
         />
         <LabelInput
           label="Confirm Password"
+          name="confirmPassword"
           value={passwordConfirm}
           onChange={(d) => setPasswordConfirm(d)}
           type="password"

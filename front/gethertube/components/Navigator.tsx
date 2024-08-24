@@ -37,6 +37,7 @@ const Navigator = () => {
       {pathname.includes("/room/") && (
         <div className="flex items-center w-1/4">
           <YoutubeInput
+            name="youtube"
             className="text-sm-normal placeholder:text-sm-normal placeholder:flex placeholder:items-center w-full"
             placeholder="유튜브 url을 입력 해 주세요"
           />
