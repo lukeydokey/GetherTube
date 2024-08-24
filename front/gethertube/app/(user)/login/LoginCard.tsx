@@ -8,8 +8,10 @@ import { useToast } from "@/hook/useToast";
 import { utilStorage } from "@/util/utilStorage";
 import { useRouter } from "next/navigation";
 import { userStore } from "@/store/userStore";
+import { useCookies } from "@/api/cookies";
 
 const LoginCard = () => {
+  const { setCookie } = useCookies();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,6 +37,7 @@ const LoginCard = () => {
       });
       storage.setItem("accessToken", accessToken);
       setUser(userId, nickName);
+      setCookie("accessToken", accessToken);
       router.push("/");
     } else {
       showToast("로그인에 실패하였습니다.", "error");

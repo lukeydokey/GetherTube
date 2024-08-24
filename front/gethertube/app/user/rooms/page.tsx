@@ -1,5 +1,16 @@
-const Page = () => {
-  return <div>사용자 방 정보 페이지</div>;
+import { RoomCard } from "@/components";
+import { userDetailApi } from "@/api/api";
+
+const Page = async () => {
+  // const res = await userDetailApi();
+  // const data = await res.json();
+  // console.log(data);
+
+  return (
+    <div>
+      <RoomCard />
+    </div>
+  );
 };
 
 export default Page;

@@ -3,14 +3,21 @@
 import Image from "next/image";
 import { Input } from "../";
 import { TypeInputProps } from "./Input";
-import { getYoutubeApi } from "@/api/api";
+import { getYoutubeApi, addRoomPlaylistApi } from "@/api/api";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { ResponseFormat, TypeResAddRoomPlaylist } from "@/api/types";
+import { useToast } from "@/hook/useToast";
 
 const YoutubeInput = (props: TypeInputProps) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [channel, setChannel] = useState("");
   const [thumbnail, setThumbnail] = useState("");
+  const [playlistUrl, setPlaylistUrl] = useState("");
+
+  const path = usePathname();
+  const { showToast } = useToast();
   // const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
   //   if (e.key === "Enter") {
   //     const { value } = e.target as HTMLInputElement;
@@ -26,6 +33,22 @@ const YoutubeInput = (props: TypeInputProps) => {
   //   }
   // };
 
+  const handleAddPlaylist = async () => {
+    try {
+      const response: ResponseFormat<TypeResAddRoomPlaylist> =
+        await addRoomPlaylistApi(path.split("room/")[1], {
+          playlistUrl,
+        });
+      if (response.status === 200) {
+        showToast("플레이리스트에 추가되었습니다.", "success");
+        setPlaylistUrl("");
+      }
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleInputChange = async (d: string) => {
     if (d.includes("https://www.youtube.com/watch?v=")) {
       const data = d.split("?v=");
@@ -36,16 +59,19 @@ const YoutubeInput = (props: TypeInputProps) => {
           setTitle(title);
           setChannel(channelTitle);
           setThumbnail(thumbnails.standard.url as string);
+          setPlaylistUrl(d);
         } else {
           setTitle("");
           setChannel("");
           setThumbnail("");
+          setPlaylistUrl("");
         }
       }
     } else {
       setTitle("");
       setChannel("");
       setThumbnail("");
+      setPlaylistUrl("");
     }
   };
 
@@ -58,6 +84,7 @@ const YoutubeInput = (props: TypeInputProps) => {
     <div className="relative flex w-full">
       <Input
         {...props}
+        value={playlistUrl}
         onChange={handleInputChange}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
@@ -73,7 +100,10 @@ const YoutubeInput = (props: TypeInputProps) => {
                 width={300}
                 height={300}
               />
-              <div className="bg-slate-900 w-full h-full absolute top-0 left-0 opacity-0 hover:opacity-90 flex justify-center items-center hover:cursor-pointer">
+              <div
+                className="bg-slate-900 w-full h-full absolute top-0 left-0 opacity-0 hover:opacity-90 flex justify-center items-center hover:cursor-pointer"
+                onMouseDown={handleAddPlaylist}
+              >
                 재생하기
               </div>
             </div>

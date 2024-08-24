@@ -6,10 +6,12 @@ import Button from "./button/Button";
 import FullButton from "./button/FullButton";
 import YoutubeInput from "./input/YoutubeInput";
 import Avatar from "./avatar/Avatar";
+import RoomCard from "./card/RoomCard";
 
 export {
   Card,
   TitleCard,
+  RoomCard,
   Input,
   LabelInput,
   Button,
