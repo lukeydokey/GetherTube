@@ -31,7 +31,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           )}
         </div>
       </div>
-      <div className="w-full h-12 flex justify-center">
+      <div className="w-full h-12 flex justify-center overflow-y-auto">
         <div className="w-[600px] flex">
           <Link href="/user/rooms">
             <div
