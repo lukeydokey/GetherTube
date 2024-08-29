@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     return null;
   }
   return (
-    <section className="flex flex-col items-center">
+    <section className="flex flex-col items-center h-full">
       <div className="w-full flex gap-4 justify-center items-center h-32">
         <div className="w-[600px] flex items-center gap-4">
           {nickName && (
@@ -62,7 +62,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </Link>
         </div>
       </div>
-      <div className="bg-neutral-800 w-full h-lvh flex justify-center">
+      <div className="bg-neutral-800 w-full flex justify-center flex-1 overflow-y-auto">
         <div className="w-[600px]">{children}</div>
       </div>
     </section>

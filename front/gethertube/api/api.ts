@@ -15,12 +15,16 @@ const urls = {
   idCheck: "/user/idCheck",
 
   addRoom: "/room",
+  room: "/room",
   addRoomPlaylist: (roomId: string) => `/room/${roomId}/playlist`,
 };
 
-const fetchGet = async (url: string): Promise<Response> => {
+const customFetch = async (
+  method: "GET" | "PUT" | "DELETE",
+  url: string
+): Promise<Response> => {
   const res = await fetch(url, {
-    method: "GET",
+    method,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -114,6 +118,14 @@ export const addRoomPlaylistApi = async (
   const response = await fetchPost(
     `${BASE_URL}${urls.addRoomPlaylist(roomId)}`,
     params
+  );
+  return response.json();
+};
+
+export const deleteRoomApi = async (roomId: string) => {
+  const response = await customFetch(
+    "DELETE",
+    `${BASE_URL}${urls.room}/${roomId}`
   );
   return response.json();
 };

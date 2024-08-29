@@ -50,6 +50,7 @@ const YoutubeInput = (props: TypeInputProps) => {
   };
 
   const handleInputChange = async (d: string) => {
+    if (!d) return;
     if (d.includes("https://www.youtube.com/watch?v=")) {
       const data = d.split("?v=");
       if (data.length === 2) {

@@ -7,6 +7,7 @@ import FullButton from "./button/FullButton";
 import YoutubeInput from "./input/YoutubeInput";
 import Avatar from "./avatar/Avatar";
 import RoomCard from "./card/RoomCard";
+import Icon from "./icons";
 
 export {
   Card,
@@ -18,4 +19,5 @@ export {
   FullButton,
   YoutubeInput,
   Avatar,
+  Icon,
 };
