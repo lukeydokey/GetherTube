@@ -35,7 +35,7 @@ dependencies {
     // MongoDB
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // Rest API & Web Socket
     implementation 'org.springframework.boot:spring-boot-starter-web'
