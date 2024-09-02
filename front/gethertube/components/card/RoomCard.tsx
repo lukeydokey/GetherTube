@@ -44,8 +44,9 @@ const RoomCard = ({ room }: RoomCardProps) => {
   };
 
   useEffect(() => {
-    const roomPlaylist = room.roomPlaylist.filter((d) => d);
-    if (roomPlaylist.length > 0) {
+    if (!roomId) return;
+    const roomPlaylist = room.roomPlaylist?.filter((d) => d);
+    if (roomPlaylist?.length > 0) {
       setLoading(true);
       getYoutubeThumbnail(roomPlaylist[0]);
     }
