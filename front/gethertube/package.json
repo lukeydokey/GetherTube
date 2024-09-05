@@ -10,16 +10,20 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@stomp/stompjs": "^7.0.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-youtube": "^10.1.0",
+    "socketjs-client": "^1.0.2",
+    "sockjs-client": "^1.6.1",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sockjs-client": "^1.5.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
