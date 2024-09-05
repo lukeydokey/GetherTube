@@ -2,6 +2,7 @@ import {
   TypeReqUserRegist,
   TypeReqLogin,
   TypeReqAddRoomPlaylist,
+  TypeReqUserDetailChange,
 } from "./types";
 import { getCookie } from "./cookies";
 
@@ -19,9 +20,10 @@ const urls = {
   addRoomPlaylist: (roomId: string) => `/room/${roomId}/playlist`,
 };
 
-const customFetch = async (
+const customFetch = async <T>(
   method: "GET" | "PUT" | "DELETE",
-  url: string
+  url: string,
+  params?: T
 ): Promise<Response> => {
   const res = await fetch(url, {
     method,
@@ -29,6 +31,7 @@ const customFetch = async (
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
+    body: JSON.stringify(params),
   });
   return res;
 };
@@ -100,6 +103,15 @@ export const userDetailApi = async () => {
       Authorization: `Bearer ${accessToken})}`,
     },
   });
+  return response.json();
+};
+
+export const userDetailChangeApi = async (params: TypeReqUserDetailChange) => {
+  const response = await customFetch<TypeReqUserDetailChange>(
+    "PUT",
+    `${BASE_URL}${urls.userRegist}`,
+    params
+  );
   return response.json();
 };
 

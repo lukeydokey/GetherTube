@@ -55,6 +55,11 @@ export interface TypeResAddRoomPlaylist {
   roomPlaylist: string[];
 }
 
+export interface TypeReqUserDetailChange {
+  nickName: string;
+  chatColor: string;
+}
+
 export interface TypeUserRooms {
   _id: string;
   roomId: string;
