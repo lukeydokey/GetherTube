@@ -7,9 +7,8 @@ import { ResponseFormat, TypeResUserDetail } from "@/api/types";
 const Page = async () => {
   const res: ResponseFormat<TypeResUserDetail> = await userDetailApi();
   if (res.status !== 200) return null;
-  console.log(res);
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 py-5">
       <span className="text-white">
         룸 정보 {res?.data?.userRooms.length || 0}
       </span>
