@@ -1,6 +1,6 @@
 export interface TypeCardProps {
-  className: string;
-  children: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 }
 
 const Card = ({ className, children }: TypeCardProps) => {

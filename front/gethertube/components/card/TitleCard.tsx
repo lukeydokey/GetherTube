@@ -3,6 +3,7 @@ import { TypeCardProps } from "../types";
 
 interface TypeTitleCardProps extends TypeCardProps {
   title: string;
+  children?: React.ReactNode;
 }
 
 const TitleCard = ({ title, children }: TypeTitleCardProps) => {

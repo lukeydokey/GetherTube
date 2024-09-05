@@ -3,7 +3,7 @@
 import React, { forwardRef } from "react";
 
 export interface TypeInputProps {
-  ref: any;
+  ref?: any;
   name: string;
   value?: string;
   type?: React.HTMLInputTypeAttribute;
@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, TypeInputProps>(
       onFocus,
       onBlur,
     },
-    ref
+    ref?
   ) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
