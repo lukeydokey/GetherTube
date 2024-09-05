@@ -1,6 +1,5 @@
 package com.toy.gethertube.Interceptor;
 
-import com.toy.gethertube.service.CustomUserDetailsService;
 import com.toy.gethertube.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,17 +12,14 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
+@Slf4j(topic = "ChannelInterceptor")
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class ChannelInterceptorImpl implements ChannelInterceptor {
 
