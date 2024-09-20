@@ -30,7 +30,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
     };
     stompClient.connect(
       headers,
-      function (frame) {
+      function (frame: any) {
         setStompClient(stompClient); // stompClient 상태 저장
         console.log("Connected: " + frame);
 
@@ -53,7 +53,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
           }
         });
       },
-      function (error) {
+      function (error: any) {
         console.log("Error : " + error);
       }
     );
