@@ -1,9 +1,10 @@
 "use client";
 import YouTube from "react-youtube";
-import { useEffect, useRef } from "react";
-import { Client, IFrame } from "@stomp/stompjs";
+import { useEffect, useRef, useState } from "react";
+import { Client, CompatClient, IFrame } from "@stomp/stompjs";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { Button, Input } from "@/components";
 
 interface TypeParams {
   id: string;
@@ -16,29 +17,59 @@ interface TypeRoomIdProps {
 const Page = ({ params }: TypeRoomIdProps) => {
   const { id } = params;
 
-  // const client = useRef<Client | null>(null);
+  const [serverChat, setServerChat] = useState("");
+  const [chat, setChat] = useState("");
 
-  // const fetchData = async () => {
-  //   console.log(localStorage.getItem("accessToken"));
-  //   const response = await fetch(`https://www.gethertube.site/api/ws`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  //       Authorization: `Bearer eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiJramtpbUBuYXZlci5jb20iLCJpYXQiOjE3MjUzNzA1ODIsImV4cCI6MTcyNTM3NDE4Mn0.PVoluejtqWmMmxrNrTDpGE1OelWAKMY9bxjiayevDaHimDBMtlGnG7z90HHMC30I`,
-  //     },
-  //   });
-
-  //   console.log(response);
-  //   console.log(await response.json());
-  // };
+  const [stompClient, setStompClient] = useState<CompatClient | null>(null);
 
   useEffect(() => {
     var sock = new SockJS("https://www.gethertube.site/api/ws");
-    sock.onopen = function () {
-      console.log("open");
-      sock.send("test");
+    var stompClient = Stomp.over(sock);
+    var headers = {
+      Authorization: "Bearer " + localStorage.getItem("accessToken"),
     };
+    stompClient.connect(
+      headers,
+      function (frame) {
+        setStompClient(stompClient); // stompClient 상태 저장
+        console.log("Connected: " + frame);
+
+        stompClient.subscribe(`/sub/chat/${id}`, (message) => {
+          console.log(message);
+          if (message.body) {
+            const receivedMessage = JSON.parse(message.body);
+            setServerChat(receivedMessage);
+            console.log("Received message:", receivedMessage);
+            // setMessages((prevMessages) => [...prevMessages, receivedMessage]); // 메시지 추가
+          }
+        });
+
+        stompClient.subscribe(`/sub/playInfo/${id}`, (message) => {
+          console.log(message);
+          if (message.body) {
+            const receivedMessage = JSON.parse(message.body);
+            console.log("Received message:", receivedMessage);
+            // setMessages((prevMessages) => [...prevMessages, receivedMessage]); // 메시지 추가
+          }
+        });
+      },
+      function (error) {
+        console.log("Error : " + error);
+      }
+    );
+
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect(() => {
+          console.log("Disconnected");
+        });
+      }
+    };
+    // var sock = new SockJS("https://www.gethertube.site/api/ws");
+    // sock.onopen = function () {
+    //   console.log("open");
+    //   sock.send("test");
+    // };
     // fetchData();
     // 1. SockJS 객체를 생성한다
     // const socket = new SockJS(`https://www.gethertube.site/api/ws`);
@@ -128,11 +159,28 @@ const Page = ({ params }: TypeRoomIdProps) => {
     //   client.deactivate();
     // };
   }, []);
+
+  // 버튼 클릭 시 메시지 전송
+  const sendMessage = () => {
+    if (stompClient) {
+      stompClient.send(
+        `/api/pub/chat/message`,
+        {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
+        JSON.stringify({ roomId: id, chat: chat })
+      );
+      console.log(`Message sent to /api/pub/chat/message`);
+    } else {
+      console.log("STOMP client is not connected");
+    }
+  };
+
   return (
     <div className="w-full h-full p-10 flex gap-10 flex-col md:flex-row">
       <div className="md:w-[70%] h-full flex flex-col gap-5 w-full">
         <YouTube
-          videoId="GZKj-PRPc2c" // defaults -> ''
+          videoId={id}
           id=""
           className=""
           iframeClassName=""
@@ -158,7 +206,19 @@ const Page = ({ params }: TypeRoomIdProps) => {
         <div className="w-full h-[10%] bg-slate-50"></div>
       </div>
       <div className="w-[30%] h-full">
-        <div className="w-full h-full bg-slate-300">wefkbawelufbwealuf</div>
+        <div className="w-full h-full bg-slate-300 flex flex-col">
+          <div className="flex-1">{serverChat}</div>
+          <div>
+            <Input
+              name="chat"
+              onChange={(d) => setChat(d)}
+              placeholder="채팅입력"
+            />
+            <Button onClick={sendMessage} className="h-8">
+              채팅 보내기
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

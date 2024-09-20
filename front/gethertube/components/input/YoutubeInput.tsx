@@ -18,20 +18,6 @@ const YoutubeInput = (props: TypeInputProps) => {
 
   const path = usePathname();
   const { showToast } = useToast();
-  // const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === "Enter") {
-  //     const { value } = e.target as HTMLInputElement;
-
-  //     const data = value.split("?v=");
-  //     if (data.length === 2) {
-  //       const response = await getYoutubeApi(data[1]);
-  //       const { channelTitle, thumbnails, title } = response.items[0].snippet;
-  //       setTitle(title);
-  //       setChannel(channelTitle);
-  //       setThumbnail(thumbnails.standard.url as string);
-  //     }
-  //   }
-  // };
 
   const handleAddPlaylist = async () => {
     try {
