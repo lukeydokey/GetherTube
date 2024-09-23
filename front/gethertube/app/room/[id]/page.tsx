@@ -1,6 +1,6 @@
 "use client";
 import YouTube from "react-youtube";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, KeyboardEvent } from "react";
 import { Client, CompatClient, IFrame } from "@stomp/stompjs";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -14,10 +14,19 @@ interface TypeRoomIdProps {
   params: TypeParams;
 }
 
+interface TypeChat {
+  nickName: string;
+  chat: string;
+  rommId?: string;
+}
+
 const Page = ({ params }: TypeRoomIdProps) => {
   const { id } = params;
 
+  const chatBoxRef = useRef<HTMLDivElement>(null);
+
   const [serverChat, setServerChat] = useState("");
+  const [liveChat, setLiveChat] = useState<TypeChat[]>([]);
   const [chat, setChat] = useState("");
 
   const [stompClient, setStompClient] = useState<CompatClient | null>(null);
@@ -35,10 +44,14 @@ const Page = ({ params }: TypeRoomIdProps) => {
         console.log("Connected: " + frame);
 
         stompClient.subscribe(`/sub/chat/${id}`, (message) => {
-          console.log(message);
           if (message.body) {
-            const receivedMessage = JSON.parse(message.body);
-            setServerChat(receivedMessage);
+            const receivedMessage: TypeChat = JSON.parse(message.body);
+
+            const newChat = {
+              nickName: receivedMessage.nickName,
+              chat: receivedMessage.chat,
+            };
+            setLiveChat((prev) => [...prev, newChat]);
             console.log("Received message:", receivedMessage);
             // setMessages((prevMessages) => [...prevMessages, receivedMessage]); // 메시지 추가
           }
@@ -160,6 +173,10 @@ const Page = ({ params }: TypeRoomIdProps) => {
     // };
   }, []);
 
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") sendMessage();
+  };
+
   // 버튼 클릭 시 메시지 전송
   const sendMessage = () => {
     if (stompClient) {
@@ -176,6 +193,12 @@ const Page = ({ params }: TypeRoomIdProps) => {
       console.log("STOMP client is not connected");
     }
   };
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [liveChat]); // messages가 업데이트될 때마다 스크롤 이동
 
   return (
     <div className="w-full h-full p-10 flex gap-10 flex-col md:flex-row">
@@ -208,11 +231,18 @@ const Page = ({ params }: TypeRoomIdProps) => {
       </div>
       <div className="w-[30%] h-full">
         <div className="w-full h-full bg-slate-300 flex flex-col">
-          <div className="flex-1">{serverChat}</div>
+          <div ref={chatBoxRef} className="flex-1 overflow-y-auto">
+            {liveChat.map((chat, index) => (
+              <div key={index}>
+                {chat.nickName}: {chat.chat}
+              </div>
+            ))}
+          </div>
           <div>
             <Input
               name="chat"
               onChange={(d) => setChat(d)}
+              onKeyDown={handleInputKeyDown}
               placeholder="채팅입력"
             />
             <Button onClick={sendMessage} className="h-8">
