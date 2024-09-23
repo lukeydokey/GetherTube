@@ -163,14 +163,15 @@ const Page = ({ params }: TypeRoomIdProps) => {
   // 버튼 클릭 시 메시지 전송
   const sendMessage = () => {
     if (stompClient) {
+      const headers = {
+        Authorization: "Bearer " + localStorage.getItem("accessToken"),
+      };
       stompClient.send(
-        `/api/pub/chat/message`,
-        {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
-        },
+        `/pub/chat/message`,
+        headers,
         JSON.stringify({ roomId: id, chat: chat })
       );
-      console.log(`Message sent to /api/pub/chat/message`);
+      console.log(`Message sent to /pub/chat/message`);
     } else {
       console.log("STOMP client is not connected");
     }
