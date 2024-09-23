@@ -15,6 +15,6 @@ public class ChatController {
 
     @MessageMapping("/chat/message")
     public void sendMessage(@RequestBody ChatDto chatDto){
-        chatPublisher.publish("chat:room:" + chatDto.getRoomId(), chatDto);
+        chatPublisher.publish("/sub/chat/" + chatDto.getRoomId(), chatDto);
     }
 }

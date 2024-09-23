@@ -15,6 +15,6 @@ public class PlayInfoController {
 
     @MessageMapping("/playInfo/message")
     public void updatePlayInfo(@RequestBody PlayInfoDto playInfoDto) {
-        playInfoPublisher.publish("playInfo:room:" + playInfoDto.getRoomId(), playInfoDto);
+        playInfoPublisher.publish("/sub/playInfo/" + playInfoDto.getRoomId(), playInfoDto);
     }
 }

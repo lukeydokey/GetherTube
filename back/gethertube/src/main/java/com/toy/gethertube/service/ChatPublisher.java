@@ -16,10 +16,10 @@ public class ChatPublisher {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void publish(String channel, ChatDto chatDto){
-        redisTemplate.convertAndSend(channel, chatDto.getChat());
+        redisTemplate.convertAndSend(channel, chatDto);
 
         String key = "chat:" + chatDto.getRoomId();
-        redisTemplate.opsForList().rightPush(key, chatDto.getChat());
+        redisTemplate.opsForList().rightPush(key, chatDto);
         redisTemplate.expire(key, Duration.ofHours(1));
     }
 }

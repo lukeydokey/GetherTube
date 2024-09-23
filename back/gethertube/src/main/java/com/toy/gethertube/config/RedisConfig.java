@@ -37,19 +37,17 @@ public class RedisConfig {
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(chatListenerAdapter, new PatternTopic("chat:room:*"));
-        container.addMessageListener(playInfoListenerAdapter, new PatternTopic("playInfo:room:*"));
+        container.addMessageListener(chatListenerAdapter, new PatternTopic("*chat*"));
+        container.addMessageListener(playInfoListenerAdapter, new PatternTopic("*playInfo*"));
         return container;
     }
 
     @Bean
-    @Qualifier("chatListenerAdapter")
     MessageListenerAdapter chatListenerAdapter(ChatSubscriber chatSubscriber){
-        return new MessageListenerAdapter(chatSubscriber, "handleMessage");
+        return new MessageListenerAdapter(chatSubscriber, "onMessage");
     }
 
     @Bean
-    @Qualifier("playInfoListenerAdapter")
     MessageListenerAdapter playInfoListenerAdapter(PlayInfoSubscriber playInfoSubscriber){
         return new MessageListenerAdapter(playInfoSubscriber, "handlePlayInfo");
     }
