@@ -183,10 +183,16 @@ const Page = ({ params }: TypeRoomIdProps) => {
       const headers = {
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       };
+      const user = localStorage.getItem("user");
+      const nickName = user ? JSON.parse(user).nickName : "default";
       stompClient.send(
         `/pub/chat/message`,
         headers,
-        JSON.stringify({ roomId: id, chat: chat })
+        JSON.stringify({
+          roomId: id,
+          chat: chat,
+          nickName,
+        })
       );
       console.log(`Message sent to /pub/chat/message`);
     } else {
