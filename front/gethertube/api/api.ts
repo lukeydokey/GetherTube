@@ -18,6 +18,8 @@ const urls = {
   addRoom: "/room",
   room: "/room",
   addRoomPlaylist: (roomId: string) => `/room/${roomId}/playlist`,
+
+  roomMember: "/room/member",
 };
 
 const customFetch = async <T>(
@@ -118,6 +120,14 @@ export const userDetailChangeApi = async (params: TypeReqUserDetailChange) => {
 /**
  * Room Api
  */
+export const getRoomInfoApi = async (roomId: string) => {
+  const response = await customFetch(
+    "GET",
+    `${BASE_URL}${urls.room}/${roomId}`
+  );
+  return response.json();
+};
+
 export const addRoomApi = async () => {
   const response = await fetchPost(`${BASE_URL}${urls.addRoom}`);
   return response.json();
@@ -139,5 +149,10 @@ export const deleteRoomApi = async (roomId: string) => {
     "DELETE",
     `${BASE_URL}${urls.room}/${roomId}`
   );
+  return response.json();
+};
+
+export const addRoomMember = async (roomId: string) => {
+  const response = await fetchPost(`${BASE_URL}${urls.roomMember}/${roomId}`);
   return response.json();
 };

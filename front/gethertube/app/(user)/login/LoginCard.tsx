@@ -2,12 +2,12 @@
 import { TitleCard, LabelInput, FullButton } from "@/components";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { loginApi } from "@/api/api";
+import { loginApi, addRoomMember, getRoomInfoApi } from "@/api/api";
 import { ResponseFormat, TypeReqLogin, TypeResLogin } from "@/api/types";
 import { useToast } from "@/hook/useToast";
 import { utilStorage } from "@/util/utilStorage";
 import { useRouter } from "next/navigation";
-import { userStore } from "@/store/userStore";
+import { userStore, roomStore } from "@/store/index";
 
 import { handleSubmit } from "./actions";
 import { useFormState } from "react-dom";
@@ -18,6 +18,7 @@ const LoginCard = () => {
   const [password, setPassword] = useState("");
 
   const { setUser } = userStore();
+  const { roomId, setRoomId } = roomStore();
 
   // console.log(state);
 
@@ -41,6 +42,13 @@ const LoginCard = () => {
       });
       storage.setItem("accessToken", accessToken);
       setUser(userId, nickName);
+      if (roomId) {
+        const response = await addRoomMember(roomId);
+        alert("WEf");
+        // router.replace(roomId);
+        // setRoomId("");
+        return;
+      }
       router.push("/");
     } else {
       showToast("로그인에 실패하였습니다.", "error");
@@ -52,7 +60,7 @@ const LoginCard = () => {
       showToast("아이디 혹은 패스워드를 입력 해 주세요.", "error");
       return;
     }
-    fetchLogin();
+    // fetchLogin();
   };
 
   const handleEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,22 +69,56 @@ const LoginCard = () => {
 
   useEffect(() => {
     if (!state) return;
-    if (state && state.status === 200) {
-      const { data } = state;
-      if (data) {
-        showToast("로그인에 성공했습니다.", "success");
-        const { userId, nickName, accessToken } = data;
-        storage.setItem("user", {
-          userId,
-          nickName,
-        });
-        storage.setItem("accessToken", accessToken);
-        setUser(userId, nickName);
-        router.push("/");
+    const api = async () => {
+      if (state && state.status === 200) {
+        const { data } = state;
+        console.log(data);
+        if (data) {
+          showToast("로그인에 성공했습니다.", "success");
+          const { userId, nickName, accessToken } = data;
+          storage.setItem("user", {
+            userId,
+            nickName,
+          });
+          storage.setItem("accessToken", accessToken);
+          setUser(userId, nickName);
+          if (roomId) {
+            const res = await getRoomInfoApi(roomId);
+            if (res.status === 200) {
+              const memberList: string[] = res.data.roomMembers.map(
+                (d: any) => d.userId
+              );
+              if (memberList.includes(userId)) {
+                alert("이미 방 멤버");
+                showToast("이미 방 멤버. 바로 이동", "success");
+                router.replace(`/room/${roomId}`);
+                return;
+              } else {
+                const response = await addRoomMember(roomId);
+                if (response.status === 200) {
+                  showToast("방에 가입 성공", "success");
+                  router.replace(`/room/${roomId}`);
+                  return;
+                }
+                showToast("알수 없는 이유로 방에 가입 불가", "error");
+              }
+            }
+            // const response = await addRoomMember(roomId);
+            return;
+            // if (response.)
+            // console.log(response);
+
+            // router.replace(roomId);
+            // setRoomId("");
+            // return;
+          }
+          router.push("/");
+        }
+      } else {
+        showToast("로그인에 실패했습니다..", "error");
       }
-    } else {
-      showToast("로그인에 실패했습니다..", "error");
-    }
+    };
+    api();
   }, [state]);
 
   return (

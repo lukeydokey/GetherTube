@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components";
+import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { addRoomApi } from "@/api/api";
@@ -21,24 +22,8 @@ const Page = () => {
     }
   };
 
-  const getRandomString = () => {
-    const minLength = 5;
-    const maxLength = 10;
-    const length =
-      Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
-    let randomString = "";
-
-    for (let i = 0; i < length; i++) {
-      randomString += getRandomChar();
-    }
-
-    return randomString;
-  };
-
   const handleRoomClick = () => {
     fetchAddRoom();
-    // const randomRoom = getRandomString();
-    // if (randomRoom) router.push(`/room/${randomRoom}`);
   };
 
   return (

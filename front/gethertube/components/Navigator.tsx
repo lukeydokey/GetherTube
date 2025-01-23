@@ -1,10 +1,9 @@
 "use client";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button, Input, YoutubeInput } from ".";
 import { utilStorage } from "@/util/utilStorage";
-import { userStore } from "@/store/userStore";
-import { useRouter } from "next/navigation";
+import { userStore, roomStore } from "@/store/index";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Navigator = () => {
@@ -12,7 +11,9 @@ const Navigator = () => {
     userId: string;
     nickName: string;
   }>({ userId: "", nickName: "" });
-  const { userId, nickName, setUser } = userStore();
+  const { userId = "", nickName = "", setUser } = userStore();
+  const { setRoomId } = roomStore();
+
   const pathname = usePathname();
   const router = useRouter();
 
@@ -28,6 +29,15 @@ const Navigator = () => {
   useEffect(() => {
     setUserDetail({ userId, nickName });
   }, [userId, nickName]);
+
+  useEffect(() => {
+    const arr = pathname.split("/").filter((d) => d);
+    if (!userId && !nickName && arr.length === 2 && arr[0] === "room") {
+      alert("로그인이 필요한 서비스입니다. 로그인하여 주세요.");
+      setRoomId(arr[1]);
+      router.replace("/login");
+    }
+  }, [pathname]);
 
   return (
     <div className="flex justify-between bg-header-back-color h-12 text-header-font-color px-3 shadow-xl">
