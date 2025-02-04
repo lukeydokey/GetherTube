@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 
 export interface TypeInputProps {
   ref?: any;
@@ -36,14 +36,32 @@ const Input = forwardRef<HTMLInputElement, TypeInputProps>(
     },
     ref?
   ) => {
+    const [isComposing, setIsComposing] = useState(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
         onChange(e.target.value);
       }
     };
 
+    const handleCompositionStart = () => {
+      console.log("com START");
+      setIsComposing(true);
+    };
+
+    const handleCompositionEnd = () => {
+      console.log("com End");
+      setIsComposing(false);
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (onKeyDown) onKeyDown(e);
+      if (!onKeyDown) return;
+      if (e.key === "Enter") {
+        console.log("com enter key 입력 ", isComposing);
+        if (!isComposing) onKeyDown?.(e);
+        return;
+      }
+      onKeyDown?.(e);
     };
 
     const handleFocus = () => {
@@ -69,6 +87,9 @@ const Input = forwardRef<HTMLInputElement, TypeInputProps>(
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        /** 한글 키 입력 */
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={handleCompositionEnd}
       />
     );
   }

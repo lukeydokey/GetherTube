@@ -174,11 +174,15 @@ const Page = ({ params }: TypeRoomIdProps) => {
   }, []);
 
   const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") sendMessage();
+    const newChat = chat;
+    if (e.key === "Enter" && newChat !== "") {
+      setChat("");
+      sendMessage(newChat);
+    }
   };
 
   // 버튼 클릭 시 메시지 전송
-  const sendMessage = () => {
+  const sendMessage = (_msg: string) => {
     if (stompClient) {
       const headers = {
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
@@ -190,7 +194,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
         headers,
         JSON.stringify({
           roomId: id,
-          chat: chat,
+          chat: _msg,
           nickName,
         })
       );
@@ -235,25 +239,40 @@ const Page = ({ params }: TypeRoomIdProps) => {
         />
         <div className="w-full h-[10%] bg-slate-50"></div>
       </div>
-      <div className="w-[30%] h-full">
-        <div className="w-full h-full bg-slate-300 flex flex-col">
-          <div ref={chatBoxRef} className="flex-1 overflow-y-auto">
+      <div className="w-[30%] h-full border border-gray-500 rounded-lg">
+        <div className="w-full h-full flex flex-col">
+          <div
+            ref={chatBoxRef}
+            className="flex-1 overflow-x-hidden overflow-y-auto p-2"
+          >
             {liveChat.map((chat, index) => (
-              <div key={index}>
-                {chat.nickName}: {chat.chat}
+              <div
+                className="inline-block relative break-words w-full"
+                key={index}
+              >
+                <div>
+                  <div className="text-green-500 font-bold inline-block relative mr-2">
+                    {chat.nickName}
+                  </div>
+                  <div className="text-white text-opacity-80 break-words inline">
+                    {chat.chat}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-          <div>
+          <div className="flex border-t border-gray-500 p-2">
             <Input
               name="chat"
+              className="flex-1"
+              value={chat}
               onChange={(d) => setChat(d)}
               onKeyDown={handleInputKeyDown}
               placeholder="채팅입력"
             />
-            <Button onClick={sendMessage} className="h-8">
+            {/* <Button onClick={sendMessage} className="h-8">
               채팅 보내기
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
