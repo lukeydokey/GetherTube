@@ -60,4 +60,10 @@ public class RoomController {
         return roomService.deleteRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto.getUserId());
     }
 
+    @GetMapping("/{roomId}/memberCheck")
+    @Operation(summary = "룸 멤버 여부 확인")
+    public ResponseEntity<?> checkRoomMember(@PathVariable("roomId") String roomId,
+                                             @AuthenticationPrincipal UserDetails userDetails) {
+        return roomService.checkRoomMember(roomId, userDetails.getUsername());
+    }
 }
