@@ -1,10 +1,20 @@
 "use client";
 import YouTube from "react-youtube";
+import { TypeUserRooms, ResponseFormat } from "@/api/types";
+import {
+  getYoutubeApi,
+  deleteRoomApi,
+  getRoomInfoApi,
+  addRoomMember,
+} from "@/api/api";
 import { useEffect, useRef, useState, KeyboardEvent } from "react";
 import { Client, CompatClient, IFrame } from "@stomp/stompjs";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { Button, Input } from "@/components";
+import { useToast } from "@/hook/useToast";
+import { userStore } from "@/store";
+import { useRouter } from "next/navigation";
 
 interface TypeParams {
   id: string;
@@ -29,9 +39,54 @@ const Page = ({ params }: TypeRoomIdProps) => {
   const [liveChat, setLiveChat] = useState<TypeChat[]>([]);
   const [chat, setChat] = useState("");
 
+  const { showToast } = useToast();
+  const router = useRouter();
+
+  const { userId } = userStore();
+
   const [stompClient, setStompClient] = useState<CompatClient | null>(null);
 
   useEffect(() => {
+    const checkRoomMembership = async () => {
+      try {
+        // 방 멤버인지 확인
+        console.log(id);
+        const res: ResponseFormat<TypeUserRooms> = await getRoomInfoApi(id);
+        console.log(res);
+        if (res && res.status === 200 && res.data) {
+          const { roomMembers } = res.data;
+          const isRoomMember = roomMembers.some(
+            (member) => member.userId === userId
+          );
+          console.log("방멤버인지 확인1 : ", isRoomMember);
+
+          if (!isRoomMember) {
+            console.log("방멤버가 아님");
+
+            // 방에 가입 시도
+            const response = await addRoomMember(id);
+            if (response.status === 200) {
+              console.log("방에 가입 성공");
+              showToast("방에 가입 성공", "success");
+            } else {
+              console.log("방에 가입 실패");
+              showToast("방 가입 실패", "error");
+              router.push("/");
+            }
+          }
+        } else {
+          showToast("방 정보를 읽어들일 수 없습니다.", "error");
+          // router.push("/");
+        }
+      } catch (error) {
+        console.error("에러 발생:", error);
+        showToast("오류가 발생했습니다.", "error");
+        // router.push("/");
+      }
+    };
+
+    checkRoomMembership();
+
     var sock = new SockJS("https://www.gethertube.site/api/ws");
     var stompClient = Stomp.over(sock);
     var headers = {

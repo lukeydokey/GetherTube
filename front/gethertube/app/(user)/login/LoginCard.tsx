@@ -83,26 +83,27 @@ const LoginCard = () => {
           storage.setItem("accessToken", accessToken);
           setUser(userId, nickName);
           if (roomId) {
-            const res = await getRoomInfoApi(roomId);
-            if (res.status === 200) {
-              const memberList: string[] = res.data.roomMembers.map(
-                (d: any) => d.userId
-              );
-              if (memberList.includes(userId)) {
-                alert("이미 방 멤버");
-                showToast("이미 방 멤버. 바로 이동", "success");
-                router.replace(`/room/${roomId}`);
-                return;
-              } else {
-                const response = await addRoomMember(roomId);
-                if (response.status === 200) {
-                  showToast("방에 가입 성공", "success");
-                  router.replace(`/room/${roomId}`);
-                  return;
-                }
-                showToast("알수 없는 이유로 방에 가입 불가", "error");
-              }
-            }
+            router.replace(`/room/${roomId}`);
+            // const res = await getRoomInfoApi(roomId);
+            // if (res.status === 200) {
+            //   const memberList: string[] = res.data.roomMembers.map(
+            //     (d: any) => d.userId
+            //   );
+            //   if (memberList.includes(userId)) {
+            //     alert("이미 방 멤버");
+            //     showToast("이미 방 멤버. 바로 이동", "success");
+            //     router.replace(`/room/${roomId}`);
+            //     return;
+            //   } else {
+            //     const response = await addRoomMember(roomId);
+            //     if (response.status === 200) {
+            //       showToast("방에 가입 성공", "success");
+            //       router.replace(`/room/${roomId}`);
+            //       return;
+            //     }
+            //     showToast("알수 없는 이유로 방에 가입 불가", "error");
+            //   }
+            // }
             // const response = await addRoomMember(roomId);
             return;
             // if (response.)
