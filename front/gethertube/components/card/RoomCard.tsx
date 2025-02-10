@@ -1,11 +1,12 @@
 "use client";
 import { TypeUserRooms, ResponseFormat } from "@/api/types";
-import { getYoutubeApi, deleteRoomApi } from "@/api/api";
-import { useState, useEffect } from "react";
+import { getYoutubeApi, deleteRoomApi, getRoomInfoApi } from "@/api/api";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Icon } from "@/components/";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hook/useToast";
+import { userStore } from "@/store/userStore";
 
 interface RoomCardProps {
   room: TypeUserRooms;
@@ -17,6 +18,8 @@ const RoomCard = ({ room }: RoomCardProps) => {
   const { roomId, roomMembers, roomPlaylist } = room;
   const { showToast } = useToast();
   const router = useRouter();
+
+  const { userId } = userStore();
 
   const getYoutubeThumbnail = async (url: string) => {
     try {
@@ -31,15 +34,45 @@ const RoomCard = ({ room }: RoomCardProps) => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleCardClick = async () => {
     try {
+      const res: ResponseFormat<TypeUserRooms> = await getRoomInfoApi(roomId);
+      if (res && res.status === 200 && res.data) {
+        const { roomMembers } = res.data;
+        const isRoomMember = roomMembers.filter(
+          (member) => member.userId === userId
+        );
+        if (isRoomMember.length > 0) {
+          showToast("방으로 이동합니다.", "success");
+          router.replace(`/room/${roomId}`);
+        } else {
+          showToast("알수 없는 이유로 방에 입장할 수 없습니다.", "error");
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleMembersClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      e.stopPropagation();
+      alert("인원수 몇명");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDelete = async (e: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      e.stopPropagation();
       const response: ResponseFormat<string> = await deleteRoomApi(roomId);
       if (response.status === 200) {
         showToast(`${roomId} Room을 삭제하였습니다.`, "success");
         router.refresh();
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -53,7 +86,10 @@ const RoomCard = ({ room }: RoomCardProps) => {
   }, [roomId]);
 
   return (
-    <div className="w-full h-[120px] p-2 rounded-md bg-neutral-700 flex gap-2 group">
+    <div
+      className="w-full h-[120px] p-2 rounded-md cursor-pointer bg-neutral-700 flex gap-2 group transition-transform duration-300 hover:scale-105"
+      onClick={handleCardClick}
+    >
       {loading ? (
         <>Loading...</>
       ) : (
@@ -76,7 +112,10 @@ const RoomCard = ({ room }: RoomCardProps) => {
           </div>
           <div className="flex flex-col justify-between flex-1">
             <div className="text-slate-100">{roomId}</div>
-            <div className="flex gap-2 text-slate-100">
+            <div
+              className="flex gap-2 text-slate-100"
+              onClick={handleMembersClick}
+            >
               {roomMembers.length || 0}
               <Icon.Users />
             </div>
