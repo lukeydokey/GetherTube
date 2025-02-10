@@ -118,7 +118,8 @@ public class RoomService {
                     .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
         }
         try {
-            addMember(room, userId, "Member");
+            if(!room.checkMember(userId)) // 중복 추가 방지
+                addMember(room, userId, "Member");
         }catch (Exception e){
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
