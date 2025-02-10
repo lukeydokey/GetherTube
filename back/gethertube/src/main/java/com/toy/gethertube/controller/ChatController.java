@@ -13,8 +13,8 @@ public class ChatController {
 
     private final ChatPublisher chatPublisher;
 
-    @MessageMapping("/chat/message")
+    @MessageMapping("/chats/message")
     public void sendMessage(@RequestBody ChatDto chatDto){
-        chatPublisher.publish("/sub/chat/" + chatDto.getRoomId(), chatDto);
+        chatPublisher.publish("/sub/chats/" + chatDto.getRoomId(), chatDto);
     }
 }

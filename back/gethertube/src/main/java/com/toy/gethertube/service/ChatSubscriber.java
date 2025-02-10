@@ -28,10 +28,10 @@ public class ChatSubscriber implements MessageListener {
 
         try {
             ChatDto chatDto = objectMapper.readValue(publishMessage, ChatDto.class);
-            log.info("Subscribed Channel: /sub/chat/{}", chatDto.getRoomId());
+            log.info("Subscribed Channel: /sub/chats/{}", chatDto.getRoomId());
             log.info("Received chat message: {}", chatDto.toString());
 
-            messagingTemplate.convertAndSend("/sub/chat/" + chatDto.getRoomId(), chatDto);
+            messagingTemplate.convertAndSend("/sub/chats/" + chatDto.getRoomId(), chatDto);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

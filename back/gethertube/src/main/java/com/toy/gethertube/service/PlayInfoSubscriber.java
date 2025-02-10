@@ -29,10 +29,10 @@ public class PlayInfoSubscriber implements MessageListener {
 
         try {
             PlayInfoDto playInfoDto = objectMapper.readValue(publishMessage, PlayInfoDto.class);
-            log.info("Subscribed Channel: /sub/playInfo/{}", playInfoDto.getRoomId());
+            log.info("Subscribed Channel: /sub/playInfos/{}", playInfoDto.getRoomId());
             log.info("Received playInfo message: {}", playInfoDto.toString());
 
-            messagingTemplate.convertAndSend("/sub/playInfo/" + playInfoDto.getRoomId(), playInfoDto);
+            messagingTemplate.convertAndSend("/sub/playInfos/" + playInfoDto.getRoomId(), playInfoDto);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

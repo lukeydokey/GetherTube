@@ -13,8 +13,8 @@ public class PlayInfoController {
 
     private final PlayInfoPublisher playInfoPublisher;
 
-    @MessageMapping("/playInfo/message")
+    @MessageMapping("/playInfos/message")
     public void updatePlayInfo(@RequestBody PlayInfoDto playInfoDto) {
-        playInfoPublisher.publish("/sub/playInfo/" + playInfoDto.getRoomId(), playInfoDto);
+        playInfoPublisher.publish("/sub/playInfos/" + playInfoDto.getRoomId(), playInfoDto);
     }
 }
