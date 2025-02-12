@@ -1,6 +1,8 @@
 package com.toy.gethertube.controller;
 
 import com.toy.gethertube.dto.room.RoomMemberReqDto;
+import com.toy.gethertube.dto.room.RoomPlaylistAddReqDto;
+import com.toy.gethertube.dto.room.RoomPlaylistUpdateReqDto;
 import com.toy.gethertube.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +46,7 @@ public class RoomController {
         return roomService.addRoomMember(roomId, userDetails.getUsername());
     }
 
+
     @PutMapping("/{roomId}/member")
     @Operation(summary = "룸 멤버 수정")
     public ResponseEntity<?> updateRoomMember(@PathVariable("roomId") String roomId,
@@ -59,11 +62,37 @@ public class RoomController {
                                               @RequestBody RoomMemberReqDto roomMemberReqDto) {
         return roomService.deleteRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto.getUserId());
     }
-
+  
     @GetMapping("/{roomId}/memberCheck")
     @Operation(summary = "룸 멤버 여부 확인")
     public ResponseEntity<?> checkRoomMember(@PathVariable("roomId") String roomId,
                                              @AuthenticationPrincipal UserDetails userDetails) {
         return roomService.checkRoomMember(roomId, userDetails.getUsername());
     }
+
+
+    @PostMapping("/{roomId}/playlist")
+    @Operation(summary = "룸 플레이리스트 추가")
+    public ResponseEntity<?> addRoomPlaylist(@PathVariable("roomId") String roomId,
+                                             @AuthenticationPrincipal UserDetails userDetails,
+                                             @RequestBody RoomPlaylistAddReqDto reqDto) {
+        return roomService.addRoomPlaylist(roomId, userDetails.getUsername(), reqDto.getPlaylistUrl());
+    }
+
+    @PatchMapping("/{roomId}/playlist")
+    @Operation(summary = "룸 플레이리스트 수정")
+    public ResponseEntity<?> updateRoomPlaylist(@PathVariable("roomId") String roomId,
+                                                @AuthenticationPrincipal UserDetails userDetails,
+                                                @RequestBody RoomPlaylistUpdateReqDto reqDto) {
+        return roomService.updateRoomPlaylist(roomId, userDetails.getUsername(), reqDto.getNewPlaylist());
+    }
+
+    @DeleteMapping("/{roomId}/playlist/{index}")
+    @Operation(summary = "룸 플레이리스트 삭제")
+    public ResponseEntity<?> deleteRoomPlaylist(@PathVariable("roomId") String roomId,
+                                                @AuthenticationPrincipal UserDetails userDetails,
+                                              @PathVariable("index") int index) {
+        return roomService.deleteRoomPlaylist(roomId, userDetails.getUsername(), index);
+    }
+
 }

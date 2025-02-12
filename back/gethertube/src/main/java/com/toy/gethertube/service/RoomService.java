@@ -1,6 +1,7 @@
 package com.toy.gethertube.service;
 
 import com.toy.gethertube.dto.room.RoomMemberReqDto;
+import com.toy.gethertube.dto.room.RoomPlaylistResDto;
 import com.toy.gethertube.entity.PlayInfo;
 import com.toy.gethertube.entity.Room;
 import com.toy.gethertube.entity.RoomMember;
@@ -49,7 +50,7 @@ public class RoomService {
         Room room = Room.builder()
                 .roomId(roomId)
                 .roomMembers(new ArrayList<>())
-                .urls(new ArrayList<>())
+                .roomPlaylist(new ArrayList<>())
                 .playInfo(playInfo)
                 .playType("Queue")
                 .isShuffled(false)
@@ -190,6 +191,86 @@ public class RoomService {
         return ResponseEntity.ok(ResponseUtil.success("룸 멤버 삭제 성공", room.toResDto()));
     }
 
+    @Transactional
+    public ResponseEntity<?> addRoomPlaylist(String roomId, String userId, String playlistUrl){
+        Room room;
+        try{
+            room = roomRepository.findByRoomId(roomId).orElseThrow();
+
+            if(!isMember(room, userId)){
+                log.error("접근할 수 없는 요청입니다.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtil.error("접근할 수 없는 요청입니다.", HttpStatus.FORBIDDEN.value()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
+        }
+        try{
+            room.addPlaylist(playlistUrl);
+            room = roomRepository.save(room);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("내부 서버 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+        return ResponseEntity.ok(ResponseUtil.success("플레이리스트 추가 성공", new RoomPlaylistResDto(room.getRoomPlaylist())));
+    }
+
+    @Transactional
+    public ResponseEntity<?> updateRoomPlaylist(String roomId, String userId, List<String> newPlaylist){
+        Room room;
+        try{
+            room = roomRepository.findByRoomId(roomId).orElseThrow();
+
+            if(!isMember(room, userId)){
+                log.error("접근할 수 없는 요청입니다.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtil.error("접근할 수 없는 요청입니다.", HttpStatus.FORBIDDEN.value()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
+        }
+        try{
+            room.updatePlaylist(newPlaylist);
+            room = roomRepository.save(room);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("내부 서버 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+        return ResponseEntity.ok(ResponseUtil.success("플레이리스트 업데이트 성공", new RoomPlaylistResDto(room.getRoomPlaylist())));
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteRoomPlaylist(String roomId, String userId, int index){
+        Room room;
+        try{
+            room = roomRepository.findByRoomId(roomId).orElseThrow();
+
+            if(!isMember(room, userId)){
+                log.error("접근할 수 없는 요청입니다.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ResponseUtil.error("접근할 수 없는 요청입니다.", HttpStatus.FORBIDDEN.value()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
+        }
+        try{
+            room.removePlaylist(index);
+            room = roomRepository.save(room);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ResponseUtil.error("내부 서버 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+        return ResponseEntity.ok(ResponseUtil.success("플레이리스트 삭제 성공", new RoomPlaylistResDto(room.getRoomPlaylist())));
+    }
 
 
     public ResponseEntity<?> checkRoomMember(String roomId, String userId) {
@@ -249,6 +330,20 @@ public class RoomService {
 
         return authority.equals("Owner");
     }
+  
+    //룸에 속한 멤버인지 확인하는 메서드
+    private boolean isMember(Room room, String userId){
+        List<RoomMember> roomMembers = room.getRoomMembers();
+        boolean flag = false;
+        for(RoomMember roomMember : roomMembers){
+            if(roomMember.getUserId().equals(userId)){
+                return true;
+            }
+        }
+
+        return flag;
+    }
+
     private String createRandomId() {
         StringBuilder id = new StringBuilder();
         Random random = new Random();

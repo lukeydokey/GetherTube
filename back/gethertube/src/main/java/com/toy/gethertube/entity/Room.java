@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,7 +22,7 @@ public class Room {
     private String _id;
     private String roomId;
     private List<RoomMember> roomMembers;
-    private List<String> urls;
+    private List<String> roomPlaylist;
 
     // Queue, List
     private String playType;
@@ -52,6 +51,18 @@ public class Room {
         }
     }
 
+    public void addPlaylist(String playlistUrl){
+        roomPlaylist.add(playlistUrl);
+    }
+
+    public void updatePlaylist(List<String> newPlaylist){
+        roomPlaylist = newPlaylist;
+    }
+
+    public void removePlaylist(int index){
+        roomPlaylist.remove(index);
+    }
+
     public void deleteMember(String userId){
         for(int i=0;i<roomMembers.size();i++){
             if(roomMembers.get(i).getUserId().equals(userId)){
@@ -75,7 +86,7 @@ public class Room {
                 ._id(this._id)
                 .roomId(this.roomId)
                 .roomMembers(this.roomMembers)
-                .urls(this.urls)
+                .roomPlaylist(this.roomPlaylist)
                 .playType(this.playType)
                 .isShuffled(this.isShuffled)
                 .replayType(this.replayType)
