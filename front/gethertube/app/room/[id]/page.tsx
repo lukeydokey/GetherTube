@@ -49,38 +49,30 @@ const Page = ({ params }: TypeRoomIdProps) => {
   useEffect(() => {
     const checkRoomMembership = async () => {
       try {
-        // 방 멤버인지 확인
-        console.log(id);
         const res: ResponseFormat<TypeUserRooms> = await getRoomInfoApi(id);
-        console.log(res);
         if (res && res.status === 200 && res.data) {
           const { roomMembers } = res.data;
           const isRoomMember = roomMembers.some(
             (member) => member.userId === userId
           );
-          console.log("방멤버인지 확인1 : ", isRoomMember);
 
           if (!isRoomMember) {
-            console.log("방멤버가 아님");
-
-            // 방에 가입 시도
             const response = await addRoomMember(id);
             if (response.status === 200) {
-              console.log("방에 가입 성공");
               showToast("방에 가입 성공", "success");
             } else {
-              console.log("방에 가입 실패");
               showToast("방 가입 실패", "error");
               router.push("/");
             }
           }
         } else {
           showToast("방 정보를 읽어들일 수 없습니다.", "error");
+          return;
           // router.push("/");
         }
       } catch (error) {
-        console.error("에러 발생:", error);
         showToast("오류가 발생했습니다.", "error");
+        return;
         // router.push("/");
       }
     };
@@ -98,7 +90,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
         setStompClient(stompClient); // stompClient 상태 저장
         console.log("Connected: " + frame);
 
-        stompClient.subscribe(`/sub/chat/${id}`, (message) => {
+        stompClient.subscribe(`/sub/chats/${id}`, (message) => {
           if (message.body) {
             const receivedMessage: TypeChat = JSON.parse(message.body);
 
@@ -112,7 +104,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
           }
         });
 
-        stompClient.subscribe(`/sub/playInfo/${id}`, (message) => {
+        stompClient.subscribe(`/sub/playInfos/${id}`, (message) => {
           console.log(message);
           if (message.body) {
             const receivedMessage = JSON.parse(message.body);
@@ -129,6 +121,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
     return () => {
       if (stompClient) {
         stompClient.disconnect(() => {
+          alert("BYE");
           console.log("Disconnected");
         });
       }
@@ -245,7 +238,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
       const user = localStorage.getItem("user");
       const nickName = user ? JSON.parse(user).nickName : "default";
       stompClient.send(
-        `/pub/chat/message`,
+        `/pub/chats/message`,
         headers,
         JSON.stringify({
           roomId: id,
@@ -267,7 +260,7 @@ const Page = ({ params }: TypeRoomIdProps) => {
 
   return (
     <div className="w-full h-full p-10 flex gap-10 flex-col md:flex-row">
-      <div className="md:w-[70%] h-full flex flex-col gap-5 w-full">
+      <div className="md:w-[75%] h-full flex flex-col gap-5 w-full">
         <YouTube
           videoId={id}
           id=""
@@ -292,9 +285,9 @@ const Page = ({ params }: TypeRoomIdProps) => {
           onPlaybackRateChange={() => {}}
           onPlaybackQualityChange={() => {}}
         />
-        <div className="w-full h-[10%] bg-slate-50"></div>
+        <div className="w-full h-[20%] bg-slate-50"></div>
       </div>
-      <div className="w-[30%] h-full border border-gray-500 rounded-lg">
+      <div className="w-[25%] h-full border border-gray-500 rounded-lg">
         <div className="w-full h-full flex flex-col">
           <div
             ref={chatBoxRef}

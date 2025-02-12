@@ -39,8 +39,10 @@ const YoutubeInput = (props: TypeInputProps) => {
     if (!d) return;
     if (d.includes("https://www.youtube.com/watch?v=")) {
       const data = d.split("?v=");
-      if (data.length === 2) {
+      console.log(data, data.length);
+      if (data?.length === 2) {
         const response = await getYoutubeApi(data[1]);
+        console.log(response);
         if (response.items.length > 0) {
           const { channelTitle, thumbnails, title } = response.items[0].snippet;
           setTitle(title);
@@ -71,7 +73,7 @@ const YoutubeInput = (props: TypeInputProps) => {
     <div className="relative flex w-full">
       <Input
         {...props}
-        value={playlistUrl}
+        // value={playlistUrl}
         onChange={handleInputChange}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}

@@ -10,16 +10,16 @@ const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/videos";
 const BASE_URL = "https://www.gethertube.site/api";
 
 const urls = {
-  userRegist: "/user",
-  login: "/user/login",
-  nickCheck: "/user/nickCheck",
-  idCheck: "/user/idCheck",
+  userRegist: "/users",
+  login: "/users/login",
+  nickCheck: "/users/nickCheck",
+  idCheck: "/users/idCheck",
 
-  addRoom: "/room",
-  room: "/room",
-  addRoomPlaylist: (roomId: string) => `/room/${roomId}/playlist`,
+  addRoom: "/rooms",
+  room: "/rooms",
+  addRoomPlaylist: (roomId: string) => `/rooms/${roomId}/playlist`,
 
-  roomMember: "/room/member",
+  roomMember: "/rooms/member",
 };
 
 const customFetch = async <T>(
@@ -52,7 +52,8 @@ const fetchPost = async <T>(url: string, params?: T): Promise<Response> => {
 
 export const getYoutubeApi = async (id: string) => {
   try {
-    const url = `${YOUTUBE_URL}?id=${id}&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}
+    const key = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+    const url = `${YOUTUBE_URL}?id=${id}&key=${key}
     &part=snippet`;
     const response = await fetch(url);
     return response.json();
