@@ -3,12 +3,15 @@ package com.toy.gethertube.dto.playinfo;
 import com.toy.gethertube.entity.PlayInfo;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayInfoDto {
+public class PlayInfoDto implements Serializable {
     private String _id;
     private String roomId;
     private Long playTime;

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/room")
+@RequestMapping("/rooms")
 @Tag(name = "Room", description = "Room API")
 @Slf4j(topic = "Room Controller")
 @RequiredArgsConstructor
@@ -38,13 +38,13 @@ public class RoomController {
         return roomService.deleteRoom(user.getUsername(), roomId);
     }
 
-    @PostMapping("/member/{roomId}")
+    @PostMapping("/{roomId}/member")
     @Operation(summary = "룸 멤버 추가")
     public ResponseEntity<?> addRoomMember(@PathVariable("roomId") String roomId, @AuthenticationPrincipal UserDetails userDetails) {
         return roomService.addRoomMember(roomId, userDetails.getUsername());
     }
 
-    @PutMapping("/member/{roomId}")
+    @PutMapping("/{roomId}/member")
     @Operation(summary = "룸 멤버 수정")
     public ResponseEntity<?> updateRoomMember(@PathVariable("roomId") String roomId,
                                               @AuthenticationPrincipal UserDetails userDetails,
@@ -52,7 +52,7 @@ public class RoomController {
         return roomService.updateRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto);
     }
 
-    @DeleteMapping("/member/{roomId}")
+    @DeleteMapping("/{roomId}/member")
     @Operation(summary = "룸 멤버 삭제")
     public ResponseEntity<?> deleteRoomMember(@PathVariable("roomId") String roomId,
                                               @AuthenticationPrincipal UserDetails userDetails,
@@ -60,4 +60,10 @@ public class RoomController {
         return roomService.deleteRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto.getUserId());
     }
 
+    @GetMapping("/{roomId}/memberCheck")
+    @Operation(summary = "룸 멤버 여부 확인")
+    public ResponseEntity<?> checkRoomMember(@PathVariable("roomId") String roomId,
+                                             @AuthenticationPrincipal UserDetails userDetails) {
+        return roomService.checkRoomMember(roomId, userDetails.getUsername());
+    }
 }

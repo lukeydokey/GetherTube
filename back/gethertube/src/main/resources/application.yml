@@ -30,4 +30,4 @@ logging:
 
 jwt:
   secret: ${properties.jwt.secret}
-  expiration: 3600
+  expiration: 21600 # 3600

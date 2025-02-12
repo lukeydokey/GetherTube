@@ -61,6 +61,15 @@ public class Room {
         }
     }
 
+    public boolean checkMember(String userId){
+        for(int i=0;i<roomMembers.size();i++){
+            if(roomMembers.get(i).getUserId().equals(userId)){
+                return true; // 유저가 멤버로 존재하면 TRUE
+            }
+        }
+        return false; // 유저가 존재하지 않으면 FALSE
+    }
+
     public RoomResDto toResDto(){
         return RoomResDto.builder()
                 ._id(this._id)

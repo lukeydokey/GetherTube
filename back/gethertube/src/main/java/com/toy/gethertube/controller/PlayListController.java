@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/playlist")
+@RequestMapping("/playlists")
 @Tag(name = "PlayList", description = "PlayList API")
 @Slf4j
 @RequiredArgsConstructor
