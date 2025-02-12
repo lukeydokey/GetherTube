@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/room")
+@RequestMapping("/rooms")
 @Tag(name = "Room", description = "Room API")
 @Slf4j(topic = "Room Controller")
 @RequiredArgsConstructor
@@ -46,7 +46,8 @@ public class RoomController {
         return roomService.addRoomMember(roomId, userDetails.getUsername());
     }
 
-    @PatchMapping("/{roomId}/member")
+
+    @PutMapping("/{roomId}/member")
     @Operation(summary = "룸 멤버 수정")
     public ResponseEntity<?> updateRoomMember(@PathVariable("roomId") String roomId,
                                               @AuthenticationPrincipal UserDetails userDetails,
@@ -61,6 +62,14 @@ public class RoomController {
                                               @RequestBody RoomMemberReqDto roomMemberReqDto) {
         return roomService.deleteRoomMember(roomId, userDetails.getUsername(), roomMemberReqDto.getUserId());
     }
+  
+    @GetMapping("/{roomId}/memberCheck")
+    @Operation(summary = "룸 멤버 여부 확인")
+    public ResponseEntity<?> checkRoomMember(@PathVariable("roomId") String roomId,
+                                             @AuthenticationPrincipal UserDetails userDetails) {
+        return roomService.checkRoomMember(roomId, userDetails.getUsername());
+    }
+
 
     @PostMapping("/{roomId}/playlist")
     @Operation(summary = "룸 플레이리스트 추가")

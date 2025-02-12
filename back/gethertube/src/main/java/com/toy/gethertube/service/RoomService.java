@@ -119,7 +119,8 @@ public class RoomService {
                     .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
         }
         try {
-            addMember(room, userId, "Member");
+            if(!room.checkMember(userId)) // 중복 추가 방지
+                addMember(room, userId, "Member");
         }catch (Exception e){
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -272,6 +273,32 @@ public class RoomService {
     }
 
 
+    public ResponseEntity<?> checkRoomMember(String roomId, String userId) {
+        User user;
+        try {
+            user = userRepository.findOneByUserId(userId).orElseThrow();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtil.error("유저 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
+        }
+
+        Room room;
+        try {
+            room = roomRepository.findByRoomId(roomId).orElseThrow();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ResponseUtil.error("룸 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()));
+        }
+
+        if(room.checkMember(userId)) { // 유저가 멤버로 존재하는 경우
+            return ResponseEntity.ok(ResponseUtil.success("유저가 멤버로 존재합니다.", true));
+        } else {
+            return ResponseEntity.ok(ResponseUtil.success("유저가 멤버로 존재하지 않습니다.", false));
+        }
+    }
+
     // Room Member 추가하는 메서드
     private void addMember(Room room, String userId, String authority){
         User user = userRepository.findOneByUserId(userId).orElseThrow();
@@ -303,7 +330,7 @@ public class RoomService {
 
         return authority.equals("Owner");
     }
-
+  
     //룸에 속한 멤버인지 확인하는 메서드
     private boolean isMember(Room room, String userId){
         List<RoomMember> roomMembers = room.getRoomMembers();
@@ -330,6 +357,5 @@ public class RoomService {
         }
         return id.toString();
     }
-
 
 }

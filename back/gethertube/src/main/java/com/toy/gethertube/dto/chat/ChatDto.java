@@ -1,25 +1,18 @@
 package com.toy.gethertube.dto.chat;
 
-import com.toy.gethertube.entity.Chat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
 @Getter
-@Setter
-@Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatDto {
-    private String _id;
+public class ChatDto implements Serializable {
     private String roomId;
-    private ArrayList<String> chats;
-
-    public Chat toEntity(){
-        return Chat.builder()
-                ._id(this._id)
-                .roomId(this.roomId)
-                .chats(this.chats)
-                .build();
-    }
+    private String nickName;
+    private String chat;
 }
