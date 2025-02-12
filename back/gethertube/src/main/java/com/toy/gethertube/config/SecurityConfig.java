@@ -29,7 +29,7 @@ public class SecurityConfig{
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
-            "/user/**", "/swagger-ui/**", "/api-docs", "/swagger-ui.html",
+            "/users/**", "/swagger-ui/**", "/api-docs", "/swagger-ui.html",
             "/v3/api-docs/**", "/api-docs/**", "/ws", "/ws/**"
     };
 
@@ -57,7 +57,7 @@ public class SecurityConfig{
         // 권한 규칙 작성
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         //@PreAuthrization을 사용할 것이기 때문에 모든 경로에 대한 인증처리는 Pass
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
