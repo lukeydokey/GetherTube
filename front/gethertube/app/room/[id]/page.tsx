@@ -121,8 +121,8 @@ const Page = ({ params }: TypeRoomIdProps) => {
     return () => {
       if (stompClient) {
         stompClient.disconnect(() => {
-          alert("BYE");
-          console.log("Disconnected");
+          // alert("BYE");
+          // console.log("Disconnected");
         });
       }
     };

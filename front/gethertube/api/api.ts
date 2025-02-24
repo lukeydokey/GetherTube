@@ -6,6 +6,8 @@ import {
 } from "./types";
 import { getCookie } from "./cookies";
 
+export const PAGE_URL = "https://gether-tube.vercel.app";
+
 const YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/videos";
 const BASE_URL = "https://www.gethertube.site/api";
 
@@ -52,7 +54,8 @@ const fetchPost = async <T>(url: string, params?: T): Promise<Response> => {
 
 export const getYoutubeApi = async (id: string) => {
   try {
-    const key = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+    const key2 = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+    const key = "AIzaSyAscAEYkIMPcVF4srtZEeof4ACMhInPFaI";
     const url = `${YOUTUBE_URL}?id=${id}&key=${key}
     &part=snippet`;
     const response = await fetch(url);

@@ -1,6 +1,11 @@
 "use client";
 import { TypeUserRooms, ResponseFormat } from "@/api/types";
-import { getYoutubeApi, deleteRoomApi, getRoomInfoApi } from "@/api/api";
+import {
+  PAGE_URL,
+  getYoutubeApi,
+  deleteRoomApi,
+  getRoomInfoApi,
+} from "@/api/api";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Icon } from "@/components/";
@@ -20,6 +25,11 @@ const RoomCard = ({ room }: RoomCardProps) => {
   const router = useRouter();
 
   const { userId } = userStore();
+
+  const ownerMember = room.roomMembers.find(
+    (member) => member.userId === userId
+  );
+  const isOwner = ownerMember?.authority === "Owner";
 
   const getYoutubeThumbnail = async (url: string) => {
     try {
@@ -63,7 +73,27 @@ const RoomCard = ({ room }: RoomCardProps) => {
     }
   };
 
-  const handleDelete = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleShareClick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      e.stopPropagation();
+      await navigator.clipboard.writeText(`${PAGE_URL}/rooms/${room.roomId}`);
+      showToast("링크가 클립보드에 복사되었습니다.", "success");
+    } catch (e) {
+      console.error(e);
+      showToast("링크가 클립보드에 복사되지 못했습니다..", "error");
+    }
+  };
+
+  const handleRoomOut = async (e: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      e.stopPropagation();
+      showToast("룸 탈퇴 개발중", "error");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleRoomDelete = async (e: React.MouseEvent<HTMLDivElement>) => {
     try {
       e.stopPropagation();
       const response: ResponseFormat<string> = await deleteRoomApi(roomId);
@@ -116,14 +146,21 @@ const RoomCard = ({ room }: RoomCardProps) => {
               className="flex gap-2 text-slate-100"
               onClick={handleMembersClick}
             >
-              {roomMembers.length || 0}
-              <Icon.Users />
+              <span>{roomMembers.length || 0}</span>
+              {/* <Icon.Users className="hover:text-blue-500" /> */}
+              {/* <MemberListPopover /> */}
             </div>
           </div>
           <div className="flex flex-col justify-between opacity-0 group-hover:opacity-100">
-            <Icon.Share />
-            <div onClick={handleDelete}>
-              <Icon.Trash />
+            <div onClick={handleShareClick} className="hover:text-blue-500">
+              <Icon.Share className="hover:text-blue-500" />
+            </div>
+            <div onClick={isOwner ? handleRoomDelete : handleRoomOut}>
+              {isOwner ? (
+                <Icon.Trash className="hover:text-blue-500" />
+              ) : (
+                <Icon.ArrowRightOut className="hover:text-blue-500" />
+              )}
             </div>
           </div>
         </>

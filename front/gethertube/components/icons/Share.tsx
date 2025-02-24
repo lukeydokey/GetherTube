@@ -1,10 +1,10 @@
-const Share = () => {
+const Share = ({ className }: { className: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="size-5 text-slate-100 cursor-pointer"
+      className={`size-5 text-slate-100 cursor-pointer ${className}`}
     >
       <path
         fillRule="evenodd"
