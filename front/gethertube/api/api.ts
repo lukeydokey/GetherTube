@@ -55,8 +55,7 @@ const fetchPost = async <T>(url: string, params?: T): Promise<Response> => {
 export const getYoutubeApi = async (id: string) => {
   try {
     const key2 = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
-    const key = "AIzaSyAscAEYkIMPcVF4srtZEeof4ACMhInPFaI";
-    const url = `${YOUTUBE_URL}?id=${id}&key=${key}
+    const url = `${YOUTUBE_URL}?id=${id}&key=${key2}
     &part=snippet`;
     const response = await fetch(url);
     return response.json();
